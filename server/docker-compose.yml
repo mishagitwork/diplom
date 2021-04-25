@@ -1,0 +1,18 @@
+version: '3.7'
+
+services:
+  db:
+    image: postgres:12.4
+    restart: always
+    environment:
+      POSTGRES_USER: DIPL
+      POSTGRES_PASSWORD: SRHRPcaDCLB7LeCpbFEMc5
+      POSTGRES_DB: dipl
+    ports:
+      - 5432:5432
+
+  adminer:
+    image: adminer:4.7.7
+    restart: always
+    ports:
+      - 3002:8080
