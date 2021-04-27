@@ -1,10 +1,15 @@
-import { MigrationInterface, QueryRunner, Table } from 'typeorm'
+import {
+  MigrationInterface,
+  QueryRunner,
+  Table,
+  TableForeignKey,
+} from 'typeorm'
 
-export class CreateUsersTable20211505173800 implements MigrationInterface {
+export class CreateUniversityTable20211705214900 implements MigrationInterface {
   async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'users',
+        name: 'university',
         columns: [
           {
             name: 'id',
@@ -29,37 +34,31 @@ export class CreateUsersTable20211505173800 implements MigrationInterface {
             isNullable: false,
           },
           {
-            name: 'birthday',
-            type: 'timestamptz',
-            isNullable: true,
-          },
-          {
-            name: 'avatar',
-            type: 'varchar',
-            isNullable: true,
-          },
-          {
-            name: 'login',
+            name: 'shortName',
             type: 'varchar',
             isNullable: false,
           },
           {
-            name: 'password',
+            name: 'userId',
             type: 'varchar',
-            isNullable: false,
-          },
-          {
-            name: 'isAdmin',
-            type: 'boolean',
-            default: 'false',
+            isNullable: true,
           },
         ],
       }),
       true
     )
+    await queryRunner.createForeignKey(
+      'university',
+      new TableForeignKey({
+        columnNames: ['userId'],
+        referencedTableName: 'users',
+        referencedColumnNames: ['id'],
+        onDelete: 'CASCADE',
+      })
+    )
   }
 
   async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('users')
+    await queryRunner.dropTable('university')
   }
 }

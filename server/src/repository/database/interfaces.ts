@@ -1,5 +1,7 @@
 import { IFuncResultModel } from '@models/common/FuncResultModel'
+import { University } from '@src/models/dbm/University'
 import { User } from '@src/models/dbm/User'
+import { INewUniversityDTM } from '@src/models/dtm/UniversityDTM'
 import { INewUserDTM } from '@src/models/dtm/UserDTM'
 
 export interface IConnector {
@@ -9,6 +11,7 @@ export interface IConnector {
 export default interface IDB {
   connector: IConnector
   users: IUsersRepository
+  universities: IUniversitiesRepository
 }
 
 export interface IUsersRepository {
@@ -22,4 +25,14 @@ export interface IUsersRepository {
     password: string
   ) => Promise<IFuncResultModel<User | undefined>>
   checkLogin: (login: string) => Promise<IFuncResultModel<User | undefined>>
+}
+export interface IUniversitiesRepository {
+  getList: () => Promise<IFuncResultModel<University[]>>
+  getByID: (id: string) => Promise<IFuncResultModel<University>>
+  create: (data: INewUniversityDTM) => Promise<IFuncResultModel<University>>
+  update: (
+    id: string,
+    data: INewUniversityDTM
+  ) => Promise<IFuncResultModel<University>>
+  delete: (id: string) => Promise<IFuncResultModel<boolean>>
 }

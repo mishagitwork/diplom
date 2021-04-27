@@ -1,5 +1,4 @@
 import { User } from '@models/dbm/User'
-const bcrypt = require('bcrypt')
 
 import { IUsersRepository } from './interfaces'
 import { INewUserDTM } from '@models/dtm/UserDTM'

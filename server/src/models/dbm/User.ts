@@ -4,7 +4,9 @@ import {
   Column,
   BeforeInsert,
   BeforeUpdate,
+  OneToOne,
 } from 'typeorm'
+import { University } from './University'
 const bcrypt = require('bcrypt')
 
 @Entity({ name: 'users' })
@@ -36,16 +38,13 @@ export class User {
   @Column()
   isAdmin: boolean
 
-  @BeforeInsert()
-  updateDates() {
-    this.birthday = new Date()
-  }
+  @OneToOne(() => University, (university) => university.user) // specify inverse side as a second parameter
+  university: University
 
   @BeforeInsert()
   @BeforeUpdate()
   hashPassword() {
     try {
-      console.log('SSSSSSSSSSSS')
       this.password = bcrypt.hashSync(this.password, 10)
     } catch (e) {
       throw new Error('there are some issiue in the hash')
