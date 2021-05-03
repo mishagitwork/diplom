@@ -1,7 +1,8 @@
 <template>
   <div :class="$style.container">
     <div :class="$style.header">
-      <div class="menu" @click="showDrawer">+</div>
+      <a-icon type="menu" @click="showDrawer" />
+
       <div class="logo">Logo</div>
       <div class="back">-</div>
     </div>
@@ -19,6 +20,12 @@
           <a :href="m.route">
             <a-icon :type="m.icon" />
             <span>{{ m.text }}</span>
+          </a>
+        </a-menu-item>
+        <a-menu-item v-if="isAdmin" @click="onClose">
+          <a href="/university">
+            <a-icon type="bank" />
+            <span>Университеты</span>
           </a>
         </a-menu-item>
       </a-menu>
@@ -40,6 +47,12 @@ export default {
       ],
     }
   },
+  computed: {
+    isAdmin() {
+      return this.$store.state.user.isAdmin
+    },
+  },
+
   methods: {
     showDrawer() {
       this.visible = true

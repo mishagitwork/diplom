@@ -4,6 +4,7 @@ import {
   IUpdateUniversity,
 } from '@src/models/contracts/httpClient/UniversityContracts'
 import {
+  IAuthUser,
   INewUser,
   IUpdateUser,
 } from '@src/models/contracts/httpClient/UserContracts'
@@ -15,10 +16,7 @@ export interface IUserService {
   getByID: (id: string) => Promise<IFuncResultModel<User>>
   create: (data: INewUser) => Promise<IFuncResultModel<User>>
   update: (data: IUpdateUser) => Promise<IFuncResultModel<User>>
-  login: (data: {
-    login: string
-    password: string
-  }) => Promise<IFuncResultModel<User | undefined>>
+  login: (data: IAuthUser) => Promise<IFuncResultModel<User>>
   delete: (id: string) => Promise<IFuncResultModel<boolean>>
 }
 

@@ -75,12 +75,11 @@ class UsersRepository implements IUsersRepository {
     }
   }
 
-  login = async (login: string, password: string) => {
+  getByLogin = async (login: string) => {
     try {
       const response = await DBConnector.connector
         ?.getRepository(User)
-        .findOne({ where: { login: login, password: password } })
-
+        .findOneOrFail({ where: { login: login } })
       return { value: response }
     } catch (e) {
       return { error: e }

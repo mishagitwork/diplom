@@ -8,7 +8,7 @@ class UseCases {
   universityService: IUniversityService
   constructor() {
     this.userService = UserService
-    this.universityService = this.universityService
+    this.universityService = UniversityService
   }
 }
 

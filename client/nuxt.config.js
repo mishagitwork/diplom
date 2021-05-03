@@ -12,7 +12,6 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ['ant-design-vue/dist/antd.css'],
-
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '@/plugins/antd-ui',
@@ -32,10 +31,20 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    '@nuxtjs/style-resources',
   ],
+  styleResources: {
+    scss: ['~/assets/styles/common.scss, ~/assets/styles/breakpoints.scss'],
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    proxy: true,
+  },
+
+  proxy: {
+    '/api/': process.env['API_URL'] || 'http://localhost:4000/',
+  },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {

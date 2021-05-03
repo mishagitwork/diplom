@@ -10,3 +10,8 @@ export interface INewUser {
 export interface IUpdateUser extends INewUser {
   id: string
 }
+
+export interface IAuthUser {
+  login: string
+  password: string
+}

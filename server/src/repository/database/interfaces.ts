@@ -20,10 +20,7 @@ export interface IUsersRepository {
   create: (data: INewUserDTM) => Promise<IFuncResultModel<User>>
   update: (id: string, data: INewUserDTM) => Promise<IFuncResultModel<User>>
   delete: (id: string) => Promise<IFuncResultModel<boolean>>
-  login: (
-    login: string,
-    password: string
-  ) => Promise<IFuncResultModel<User | undefined>>
+  getByLogin: (login: string) => Promise<IFuncResultModel<User>>
   checkLogin: (login: string) => Promise<IFuncResultModel<User | undefined>>
 }
 export interface IUniversitiesRepository {

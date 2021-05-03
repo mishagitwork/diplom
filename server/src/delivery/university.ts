@@ -5,7 +5,6 @@ const router: Router = express.Router()
 
 router.get('/', async (req, res) => {
   const { value, error } = await UC.universityService.getList()
-
   if (error) {
     res.status(500).json(error || new Error('UC undefined error'))
     return
@@ -27,7 +26,6 @@ router.get('/:id', async (req, res) => {
 
 router.post('/', async (req, res) => {
   const { value, error } = await UC.universityService.create(req.body)
-
   if (error) {
     res.status(500).json(error || new Error('UC undefined error'))
     return

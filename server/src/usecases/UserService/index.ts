@@ -3,6 +3,7 @@ import R from '@repository'
 import { IUserService } from '../layerInterfaces'
 
 import {
+  IAuthUser,
   INewUser,
   IUpdateUser,
 } from '@models/contracts/httpClient/UserContracts'
@@ -23,7 +24,7 @@ class UserService implements IUserService {
   }
 
   create = async (data: INewUser) => {
-    const exist = await R.db.users.checkLogin(data.login)
+    const exist = await R.db.users.getByLogin(data.login)
     if (!exist.value) {
       const res = await R.db.users.create(data)
 
@@ -39,10 +40,12 @@ class UserService implements IUserService {
     return { value: res.value }
   }
 
-  login = async (data: { login: string; password: string }) => {
-    const res = await R.db.users.login(data.login, data.password)
+  login = async (data: IAuthUser) => {
+    const res = await R.db.users.getByLogin(data.login)
 
     if (res.error) return { error: res.error }
+    if (!res.value.verifyPassword(data.password))
+      return { error: new Error('Incorect Password') }
     return { value: res.value }
   }
 

@@ -27,7 +27,7 @@ export class University {
   @Column()
   userId: string
 
-  @OneToOne(() => User, (user) => user.university) // specify inverse side as a second parameter
+  @OneToOne(() => User, (user) => user.university, { cascade: true }) // specify inverse side as a second parameter
   @JoinColumn()
   user: User
 }
