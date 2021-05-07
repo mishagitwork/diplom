@@ -1,6 +1,8 @@
 import { IFuncResultModel } from '@models/common/FuncResultModel'
+import { Faculty } from '@src/models/dbm/Faculty'
 import { University } from '@src/models/dbm/University'
 import { User } from '@src/models/dbm/User'
+import { INewFacultyDTM } from '@src/models/dtm/FacultyDTM'
 import { INewUniversityDTM } from '@src/models/dtm/UniversityDTM'
 import { INewUserDTM } from '@src/models/dtm/UserDTM'
 
@@ -12,6 +14,7 @@ export default interface IDB {
   connector: IConnector
   users: IUsersRepository
   universities: IUniversitiesRepository
+  faculties: IFacultiesRepository
 }
 
 export interface IUsersRepository {
@@ -31,5 +34,15 @@ export interface IUniversitiesRepository {
     id: string,
     data: INewUniversityDTM
   ) => Promise<IFuncResultModel<University>>
+  delete: (id: string) => Promise<IFuncResultModel<boolean>>
+}
+export interface IFacultiesRepository {
+  getList: (universityId: string) => Promise<IFuncResultModel<Faculty[]>>
+  getByID: (id: string) => Promise<IFuncResultModel<Faculty>>
+  create: (data: INewFacultyDTM) => Promise<IFuncResultModel<Faculty>>
+  update: (
+    id: string,
+    data: INewFacultyDTM
+  ) => Promise<IFuncResultModel<Faculty>>
   delete: (id: string) => Promise<IFuncResultModel<boolean>>
 }

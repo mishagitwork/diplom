@@ -28,6 +28,12 @@
             <span>Университеты</span>
           </a>
         </a-menu-item>
+        <a-menu-item v-if="universityId" @click="onClose">
+          <a href="/faculty">
+            <a-icon type="bank" />
+            <span>Факультеты</span>
+          </a>
+        </a-menu-item>
       </a-menu>
     </a-drawer>
   </div>
@@ -50,6 +56,14 @@ export default {
   computed: {
     isAdmin() {
       return this.$store.state.user.isAdmin
+    },
+  },
+  computed: {
+    isAdmin() {
+      return this.$store.state.user.isAdmin
+    },
+    universityId() {
+      return this.$store.state.user.universityId
     },
   },
 

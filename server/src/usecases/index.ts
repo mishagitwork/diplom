@@ -1,14 +1,21 @@
 import UserService from './UserService'
 import UniversityService from './UniversityService'
+import FacultyService from './FacultyService'
 
-import { IUniversityService, IUserService } from './layerInterfaces'
+import {
+  IFacultyService,
+  IUniversityService,
+  IUserService,
+} from './layerInterfaces'
 
 class UseCases {
   userService: IUserService
   universityService: IUniversityService
+  facultyService: IFacultyService
   constructor() {
     this.userService = UserService
     this.universityService = UniversityService
+    this.facultyService = FacultyService
   }
 }
 

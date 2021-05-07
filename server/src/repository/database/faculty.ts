@@ -1,17 +1,16 @@
-import { University } from '@models/dbm/University'
+import { Faculty } from '@models/dbm/Faculty'
 
-import { IUniversitiesRepository } from './interfaces'
-import { INewUniversityDTM } from '@models/dtm/UniversityDTM'
+import { IFacultiesRepository } from './interfaces'
+import { INewFacultyDTM } from '@models/dtm/FacultyDTM'
 
 import DBConnector from '@src/repository/database/connector'
-import { User } from '@src/models/dbm/User'
 
-class UniversitiesRepository implements IUniversitiesRepository {
-  getList = async () => {
+class FacultiesRepository implements IFacultiesRepository {
+  getList = async (universityId: string) => {
     try {
       const response = await DBConnector.connector
-        ?.getRepository(University)
-        .find()
+        ?.getRepository(Faculty)
+        .find({ where: { universityId } })
       return { value: response }
     } catch (e) {
       return { error: e }
@@ -21,7 +20,7 @@ class UniversitiesRepository implements IUniversitiesRepository {
   getByID = async (id: string) => {
     try {
       const response = await DBConnector.connector
-        ?.getRepository(University)
+        ?.getRepository(Faculty)
         .findOne(id)
       if (!response) return { error: new Error('not found') }
       return { value: response }
@@ -30,24 +29,22 @@ class UniversitiesRepository implements IUniversitiesRepository {
     }
   }
 
-  create = async (data: INewUniversityDTM) => {
+  create = async (data: INewFacultyDTM) => {
     try {
-      const user = new User()
-      Object.assign(user, data.user)
-
       const response = await DBConnector.connector
-        ?.getRepository(University)
-        .save({ ...data, user })
+        ?.getRepository(Faculty)
+        .save(data)
+
       return { value: response }
     } catch (e) {
       return { error: e }
     }
   }
 
-  update = async (id: string, data: INewUniversityDTM) => {
+  update = async (id: string, data: INewFacultyDTM) => {
     try {
       const response = await DBConnector.connector
-        ?.getRepository(University)
+        ?.getRepository(Faculty)
         .update(id, data)
       return { value: response.raw }
     } catch (e) {
@@ -58,7 +55,7 @@ class UniversitiesRepository implements IUniversitiesRepository {
   delete = async (id: string) => {
     try {
       const response = await DBConnector.connector
-        ?.getRepository(University)
+        ?.getRepository(Faculty)
         .delete(id)
       return { value: !!response.affected }
     } catch (e) {
@@ -67,4 +64,4 @@ class UniversitiesRepository implements IUniversitiesRepository {
   }
 }
 
-export default new UniversitiesRepository()
+export default new FacultiesRepository()

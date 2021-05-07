@@ -4,7 +4,9 @@ import {
   Column,
   OneToOne,
   JoinColumn,
+  OneToMany,
 } from 'typeorm'
+import { Faculty } from './Faculty'
 import { User } from './User'
 
 @Entity({ name: 'university' })
@@ -27,7 +29,10 @@ export class University {
   @Column()
   userId: string
 
-  @OneToOne(() => User, (user) => user.university, { cascade: true }) // specify inverse side as a second parameter
+  @OneToOne(() => User, (user) => user.university, { cascade: true })
   @JoinColumn()
   user: User
+
+  @OneToMany(() => Faculty, (faculty) => faculty.university, { cascade: true })
+  faculties: Faculty[]
 }

@@ -1,33 +1,30 @@
 <template>
   <div :class="$style.container">
     <div :class="$style.header">
-      <div class="title">Информация о университетах</div>
+      <div class="title">Информация о факультетах</div>
       <a-button type="primary" @click="isOpen = true"> Создать </a-button>
     </div>
     <div class="list">
       <a-list
         :item-layout="isMobile ? 'vertical' : 'horizontal'"
-        :data-source="universityList"
+        :data-source="facultyList"
         style="padding: 0.5rem 3rem"
       >
-        <a-list-item slot="renderItem" slot-scope="item, index">
+        <a-list-item slot="renderItem" slot-scope="item">
           <a slot="actions">редактировать </a>
-          <a slot="actions" @click="test"> удалить</a>
+          <a slot="actions"> удалить</a>
           <a-list-item-meta :description="item.fullName">
-            <a slot="title" href="https://www.antdv.com/">{{
-              item.shortName
-            }}</a>
+            <span slot="title"> {{ item.shortName }}</span>
             <a-avatar
               slot="avatar"
               src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
             />
           </a-list-item-meta>
-          <!-- <div>content</div> -->
         </a-list-item>
       </a-list>
     </div>
     <a-drawer
-      title="Создать новый университет"
+      title="Создать новый факультет"
       :width="450"
       :visible="isOpen"
       :body-style="{ paddingBottom: '80px' }"
@@ -36,7 +33,7 @@
       <a-form-model ref="ruleForm" :model="form" :rules="rules">
         <a-form-model-item
           ref="fullName"
-          label="Полное название университета"
+          label="Полное название факультета"
           prop="fullName"
         >
           <a-input
@@ -50,7 +47,7 @@
         </a-form-model-item>
         <a-form-model-item
           ref="shortName"
-          label="Краткое название университе"
+          label="Краткое название факультета"
           prop="shortName"
         >
           <a-input
@@ -58,34 +55,6 @@
             @blur="
               () => {
                 $refs.shortName.onFieldBlur()
-              }
-            "
-          />
-        </a-form-model-item>
-        <a-form-model-item
-          ref="login"
-          label="Логин администратора университета"
-          prop="login"
-        >
-          <a-input
-            v-model="form.login"
-            @blur="
-              () => {
-                $refs.login.onFieldBlur()
-              }
-            "
-          />
-        </a-form-model-item>
-        <a-form-model-item
-          ref="password"
-          label="Пароль администратора"
-          prop="password"
-        >
-          <a-input
-            v-model="form.password"
-            @blur="
-              () => {
-                $refs.password.onFieldBlur()
               }
             "
           />
@@ -116,10 +85,14 @@
 <script>
 import delivery from '@/delivery'
 export default {
-  asyncData() {
-    return Promise.all([delivery.UniversityAction.getList()])
+  asyncData({ store }) {
+    return Promise.all([
+      delivery.FacultyAction.getList({
+        universityId: store.state.user.universityId,
+      }),
+    ])
       .then((res) => {
-        return { universityList: res[0].data }
+        return { facultyList: res[0].data }
       })
       .catch((e) => {
         console.log(e)
@@ -128,8 +101,8 @@ export default {
   data() {
     return {
       isOpen: false,
-      form: { fullName: '', shortName: '', login: '', password: '' },
-      universityList: [],
+      form: { fullName: '', shortName: '' },
+      facultyList: [],
       rules: {},
     }
   },
@@ -138,6 +111,9 @@ export default {
       if (process.client) {
         return window.innerWidth < 700
       }
+    },
+    universityId() {
+      return this.$store.state.user.universityId
     },
   },
 
@@ -148,13 +124,9 @@ export default {
           const data = {
             fullName: this.form.fullName,
             shortName: this.form.shortName,
-            user: {
-              fullName: this.form.login,
-              login: this.form.login,
-              password: this.form.password,
-            },
+            universityId: this.universityId,
           }
-          await delivery.UniversityAction.create(data)
+          await delivery.FacultyAction.create(data)
         } else {
           console.log('error submit!!')
           return false
@@ -166,10 +138,7 @@ export default {
     },
     async getUniversity() {
       const res = await delivery.UniversityAction.getList()
-      this.universityList = res.data
-    },
-    test() {
-      console.log(this.universityList)
+      this.facultyList = res.data
     },
   },
 }

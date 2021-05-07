@@ -3,6 +3,7 @@ import bodyParser from 'body-parser'
 import UsersRoutes from './users'
 import UniversitiesRoutes from './university'
 import AuthRoutes from './auth'
+import FacultyRoutes from './faculty'
 
 const app: express.Application = express()
 
@@ -10,5 +11,6 @@ app.use(bodyParser.json({ limit: '10mb' }))
 app.use('/api/auth', AuthRoutes)
 app.use('/api/users', UsersRoutes)
 app.use('/api/university', UniversitiesRoutes)
+app.use('/api/faculty', FacultyRoutes)
 
 export default app
