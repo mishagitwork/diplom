@@ -1,8 +1,10 @@
 import { IFuncResultModel } from '@models/common/FuncResultModel'
 import { Faculty } from '@src/models/dbm/Faculty'
+import { Group } from '@src/models/dbm/Group'
 import { University } from '@src/models/dbm/University'
 import { User } from '@src/models/dbm/User'
 import { INewFacultyDTM } from '@src/models/dtm/FacultyDTM'
+import { INewGroupDTM } from '@src/models/dtm/GroupDTM'
 import { INewUniversityDTM } from '@src/models/dtm/UniversityDTM'
 import { INewUserDTM } from '@src/models/dtm/UserDTM'
 
@@ -15,6 +17,7 @@ export default interface IDB {
   users: IUsersRepository
   universities: IUniversitiesRepository
   faculties: IFacultiesRepository
+  groups: IGroupsRepository
 }
 
 export interface IUsersRepository {
@@ -44,5 +47,12 @@ export interface IFacultiesRepository {
     id: string,
     data: INewFacultyDTM
   ) => Promise<IFuncResultModel<Faculty>>
+  delete: (id: string) => Promise<IFuncResultModel<boolean>>
+}
+export interface IGroupsRepository {
+  getList: (facultyId: string) => Promise<IFuncResultModel<Group[]>>
+  getByID: (id: string) => Promise<IFuncResultModel<Group>>
+  create: (data: INewGroupDTM) => Promise<IFuncResultModel<Group>>
+  update: (id: string, data: INewGroupDTM) => Promise<IFuncResultModel<Group>>
   delete: (id: string) => Promise<IFuncResultModel<boolean>>
 }
