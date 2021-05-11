@@ -1,9 +1,9 @@
 import ApiConnector from '../connector'
 
-class GroupAction {
+class StudentAction {
   getList = async (params) => {
     try {
-      return await ApiConnector.connector.get('/groups', { params })
+      return await ApiConnector.connector.get('/students', { params })
     } catch (e) {
       console.error(e)
       return new Error('Network error, try again late')
@@ -11,7 +11,7 @@ class GroupAction {
   }
   create = async (data) => {
     try {
-      return await ApiConnector.connector.post('/groups', data)
+      return await ApiConnector.connector.post('/students', data)
     } catch (e) {
       console.error(e)
       return new Error('Network error, try again late')
@@ -19,4 +19,4 @@ class GroupAction {
   }
 }
 
-export default new GroupAction()
+export default new StudentAction()

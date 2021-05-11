@@ -1,5 +1,12 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm'
 import { Faculty } from './Faculty'
+import { Student } from './Student'
 
 @Entity({ name: 'groups' })
 export class Group {
@@ -28,4 +35,7 @@ export class Group {
     eager: true,
   })
   faculty: Faculty
+
+  @OneToMany(() => Student, (student) => student.group, { cascade: true })
+  students: Student[]
 }

@@ -8,6 +8,10 @@ import {
   IUpdateGroup,
 } from '@src/models/contracts/httpClient/GroupContracts'
 import {
+  INewStudent,
+  IUpdateStudent,
+} from '@src/models/contracts/httpClient/StudentsContracts'
+import {
   INewUniversity,
   IUpdateUniversity,
 } from '@src/models/contracts/httpClient/UniversityContracts'
@@ -18,6 +22,7 @@ import {
 } from '@src/models/contracts/httpClient/UserContracts'
 import { Faculty } from '@src/models/dbm/Faculty'
 import { Group } from '@src/models/dbm/Group'
+import { Student } from '@src/models/dbm/Student'
 import { University } from '@src/models/dbm/University'
 import { User } from '@src/models/dbm/User'
 
@@ -52,5 +57,13 @@ export interface IGroupService {
   getByID: (id: string) => Promise<IFuncResultModel<Group>>
   create: (data: INewGroup) => Promise<IFuncResultModel<Group>>
   update: (data: IUpdateGroup) => Promise<IFuncResultModel<Group>>
+  delete: (id: string) => Promise<IFuncResultModel<boolean>>
+}
+
+export interface IStudentService {
+  getList: (data: { groupId: string }) => Promise<IFuncResultModel<Student[]>>
+  getByID: (id: string) => Promise<IFuncResultModel<Student>>
+  create: (data: INewStudent) => Promise<IFuncResultModel<Student>>
+  update: (data: IUpdateStudent) => Promise<IFuncResultModel<Student>>
   delete: (id: string) => Promise<IFuncResultModel<boolean>>
 }

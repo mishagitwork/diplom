@@ -8,18 +8,22 @@ import {
   IUniversityService,
   IUserService,
   IGroupService,
+  IStudentService,
 } from './layerInterfaces'
+import StudentService from './StudentService'
 
 class UseCases {
   userService: IUserService
   universityService: IUniversityService
   facultyService: IFacultyService
   groupService: IGroupService
+  studentService: IStudentService
   constructor() {
     this.userService = UserService
     this.universityService = UniversityService
     this.facultyService = FacultyService
     this.groupService = GroupService
+    this.studentService = StudentService
   }
 }
 
