@@ -6,6 +6,7 @@ import {
   OneToMany,
 } from 'typeorm'
 import { Group } from './Group'
+import { Professor } from './Professor'
 import { University } from './University'
 
 @Entity({ name: 'faculty' })
@@ -35,4 +36,9 @@ export class Faculty {
 
   @OneToMany(() => Group, (group) => group.faculty, { cascade: true })
   groups: Group[]
+
+  @OneToMany(() => Professor, (professor) => professor.faculty, {
+    cascade: true,
+  })
+  professors: Professor[]
 }

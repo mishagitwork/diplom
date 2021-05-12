@@ -4,6 +4,7 @@ import UniversitiesRepository from './university'
 import FacultiesRepository from './faculty'
 import GroupsRepository from './groups'
 import StudentsRepository from './students'
+import ProfessorsRepository from './professors'
 
 import IDB, {
   IConnector,
@@ -12,6 +13,7 @@ import IDB, {
   IUniversitiesRepository,
   IUsersRepository,
   IStudentsRepository,
+  IProfessorsRepository,
 } from './interfaces'
 
 class DB implements IDB {
@@ -21,6 +23,7 @@ class DB implements IDB {
   faculties: IFacultiesRepository
   groups: IGroupsRepository
   students: IStudentsRepository
+  professors: IProfessorsRepository
   constructor() {
     this.connector = connector
     this.users = UsersRepository
@@ -28,6 +31,7 @@ class DB implements IDB {
     this.faculties = FacultiesRepository
     this.groups = GroupsRepository
     this.students = StudentsRepository
+    this.professors = ProfessorsRepository
   }
 }
 

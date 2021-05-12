@@ -6,6 +6,7 @@ import {
   BeforeUpdate,
   OneToOne,
 } from 'typeorm'
+import { Professor } from './Professor'
 import { Student } from './Student'
 import { University } from './University'
 const bcrypt = require('bcrypt')
@@ -41,6 +42,9 @@ export class User {
 
   @OneToOne(() => University, (university) => university.user) // specify inverse side as a second parameter
   university: University
+
+  @OneToOne(() => Professor, (professor) => professor.user)
+  professor: Professor
 
   @OneToOne(() => Student, (student) => student.user)
   student: Student
