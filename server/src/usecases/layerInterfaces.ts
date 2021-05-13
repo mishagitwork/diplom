@@ -16,6 +16,10 @@ import {
   IUpdateStudent,
 } from '@src/models/contracts/httpClient/StudentsContracts'
 import {
+  INewSubject,
+  IUpdateSubject,
+} from '@src/models/contracts/httpClient/SubjectContracts'
+import {
   INewUniversity,
   IUpdateUniversity,
 } from '@src/models/contracts/httpClient/UniversityContracts'
@@ -28,6 +32,7 @@ import { Faculty } from '@src/models/dbm/Faculty'
 import { Group } from '@src/models/dbm/Group'
 import { Professor } from '@src/models/dbm/Professor'
 import { Student } from '@src/models/dbm/Student'
+import { Subject } from '@src/models/dbm/Subject'
 import { University } from '@src/models/dbm/University'
 import { User } from '@src/models/dbm/User'
 
@@ -80,5 +85,15 @@ export interface IStudentService {
   getByID: (id: string) => Promise<IFuncResultModel<Student>>
   create: (data: INewStudent) => Promise<IFuncResultModel<Student>>
   update: (data: IUpdateStudent) => Promise<IFuncResultModel<Student>>
+  delete: (id: string) => Promise<IFuncResultModel<boolean>>
+}
+
+export interface ISubjectService {
+  getList: (data: {
+    universityId: string
+  }) => Promise<IFuncResultModel<Subject[]>>
+  getByID: (id: string) => Promise<IFuncResultModel<Subject>>
+  create: (data: INewSubject) => Promise<IFuncResultModel<Subject>>
+  update: (data: IUpdateSubject) => Promise<IFuncResultModel<Subject>>
   delete: (id: string) => Promise<IFuncResultModel<boolean>>
 }

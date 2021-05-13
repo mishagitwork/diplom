@@ -7,6 +7,7 @@ import FacultyRoutes from './faculty'
 import GroupRoutes from './groups'
 import StudentRoutes from './students'
 import ProfessorRoutes from './professors'
+import SubjectRoutes from './subjects'
 
 const app: express.Application = express()
 
@@ -18,5 +19,6 @@ app.use('/api/faculty', FacultyRoutes)
 app.use('/api/groups', GroupRoutes)
 app.use('/api/students', StudentRoutes)
 app.use('/api/professors', ProfessorRoutes)
+app.use('/api/subjects', SubjectRoutes)
 
 export default app

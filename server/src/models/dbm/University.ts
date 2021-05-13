@@ -8,6 +8,7 @@ import {
 } from 'typeorm'
 import { Faculty } from './Faculty'
 import { User } from './User'
+import { Subject } from './Subject'
 
 @Entity({ name: 'university' })
 export class University {
@@ -35,4 +36,7 @@ export class University {
 
   @OneToMany(() => Faculty, (faculty) => faculty.university, { cascade: true })
   faculties: Faculty[]
+
+  @OneToMany(() => Subject, (subject) => subject.university, { cascade: true })
+  subjects: Subject[]
 }

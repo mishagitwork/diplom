@@ -3,12 +3,14 @@ import { Faculty } from '@src/models/dbm/Faculty'
 import { Group } from '@src/models/dbm/Group'
 import { Professor } from '@src/models/dbm/Professor'
 import { Student } from '@src/models/dbm/Student'
+import { Subject } from '@src/models/dbm/Subject'
 import { University } from '@src/models/dbm/University'
 import { User } from '@src/models/dbm/User'
 import { INewFacultyDTM } from '@src/models/dtm/FacultyDTM'
 import { INewGroupDTM } from '@src/models/dtm/GroupDTM'
 import { INewProfessorDTM } from '@src/models/dtm/ProfessorDTM'
 import { INewStudentDTM } from '@src/models/dtm/StudentDTM'
+import { INewSubjectDTM } from '@src/models/dtm/SubjectDTM'
 import { INewUniversityDTM } from '@src/models/dtm/UniversityDTM'
 import { INewUserDTM } from '@src/models/dtm/UserDTM'
 
@@ -24,6 +26,7 @@ export default interface IDB {
   groups: IGroupsRepository
   students: IStudentsRepository
   professors: IProfessorsRepository
+  subjects: ISubjectsRepository
 }
 
 export interface IUsersRepository {
@@ -82,5 +85,16 @@ export interface IStudentsRepository {
     id: string,
     data: INewStudentDTM
   ) => Promise<IFuncResultModel<Student>>
+  delete: (id: string) => Promise<IFuncResultModel<boolean>>
+}
+
+export interface ISubjectsRepository {
+  getList: (universityId: string) => Promise<IFuncResultModel<Subject[]>>
+  getByID: (id: string) => Promise<IFuncResultModel<Subject>>
+  create: (data: INewSubjectDTM) => Promise<IFuncResultModel<Subject>>
+  update: (
+    id: string,
+    data: INewSubjectDTM
+  ) => Promise<IFuncResultModel<Subject>>
   delete: (id: string) => Promise<IFuncResultModel<boolean>>
 }
