@@ -11,10 +11,12 @@ import {
   IStudentService,
   IProfessorService,
   ISubjectService,
+  IClassService,
 } from './layerInterfaces'
 import StudentService from './StudentService'
 import ProfessorService from './ProfessorService'
 import SubjectService from './SubjectService'
+import ClassService from './ClassService'
 
 class UseCases {
   userService: IUserService
@@ -24,6 +26,7 @@ class UseCases {
   studentService: IStudentService
   professorService: IProfessorService
   subjectService: ISubjectService
+  classService: IClassService
   constructor() {
     this.userService = UserService
     this.universityService = UniversityService
@@ -32,6 +35,7 @@ class UseCases {
     this.studentService = StudentService
     this.professorService = ProfessorService
     this.subjectService = SubjectService
+    this.classService = ClassService
   }
 }
 

@@ -1,5 +1,9 @@
 import { IFuncResultModel } from '@src/models/common/FuncResultModel'
 import {
+  INewClass,
+  IUpdateClass,
+} from '@src/models/contracts/httpClient/ClassContracts'
+import {
   INewFaculty,
   IUpdateFaculty,
 } from '@src/models/contracts/httpClient/FacultyContracts'
@@ -28,6 +32,7 @@ import {
   INewUser,
   IUpdateUser,
 } from '@src/models/contracts/httpClient/UserContracts'
+import { Class } from '@src/models/dbm/Class'
 import { Faculty } from '@src/models/dbm/Faculty'
 import { Group } from '@src/models/dbm/Group'
 import { Professor } from '@src/models/dbm/Professor'
@@ -74,6 +79,9 @@ export interface IProfessorService {
   getList: (data: {
     facultyId: string
   }) => Promise<IFuncResultModel<Professor[]>>
+  getListByUniversity: (data: {
+    universityId: string
+  }) => Promise<IFuncResultModel<Professor[]>>
   getByID: (id: string) => Promise<IFuncResultModel<Professor>>
   create: (data: INewProfessor) => Promise<IFuncResultModel<Professor>>
   update: (data: IUpdateProfessor) => Promise<IFuncResultModel<Professor>>
@@ -95,5 +103,13 @@ export interface ISubjectService {
   getByID: (id: string) => Promise<IFuncResultModel<Subject>>
   create: (data: INewSubject) => Promise<IFuncResultModel<Subject>>
   update: (data: IUpdateSubject) => Promise<IFuncResultModel<Subject>>
+  delete: (id: string) => Promise<IFuncResultModel<boolean>>
+}
+
+export interface IClassService {
+  getList: (data: { groupId: string }) => Promise<IFuncResultModel<Class[]>>
+  getByID: (id: string) => Promise<IFuncResultModel<Class>>
+  create: (data: INewClass) => Promise<IFuncResultModel<Class>>
+  update: (data: IUpdateClass) => Promise<IFuncResultModel<Class>>
   delete: (id: string) => Promise<IFuncResultModel<boolean>>
 }

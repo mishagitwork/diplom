@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm'
+import { Class } from './Class'
 import { University } from './University'
 
 @Entity({ name: 'subjects' })
@@ -25,4 +32,7 @@ export class Subject {
     eager: true,
   })
   university: University
+
+  @OneToMany(() => Class, (classs) => classs.subject, { cascade: true })
+  classes: Class[]
 }

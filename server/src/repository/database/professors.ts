@@ -18,6 +18,30 @@ class ProfessorsRepository implements IProfessorsRepository {
     }
   }
 
+  getListByUniversity = async (universityId: string) => {
+    try {
+      const response = await DBConnector.connector
+        ?.getRepository(Professor)
+        .find({
+          join: {
+            alias: 'professors',
+            innerJoin: { faculty: 'professors.faculty' },
+          },
+          relations: ['user'],
+
+          where: (qb: any) => {
+            qb.where('faculty.universityId = :universityId', {
+              universityId,
+            })
+          },
+        })
+
+      return { value: response }
+    } catch (e) {
+      return { error: e }
+    }
+  }
+
   getByID = async (id: string) => {
     try {
       const response = await DBConnector.connector

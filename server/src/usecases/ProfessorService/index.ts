@@ -15,6 +15,13 @@ class ProfessorService implements IProfessorService {
     return { value: res.value }
   }
 
+  getListByUniversity = async (data: { universityId: string }) => {
+    const res = await R.db.professors.getListByUniversity(data.universityId)
+
+    if (res.error) return { error: res.error }
+    return { value: res.value }
+  }
+
   getByID = async (id: string) => {
     const res = await R.db.professors.getByID(id)
 

@@ -4,7 +4,9 @@ import UC from '@useCases'
 const router: Router = express.Router()
 
 router.get('/', async (req: Request<any, any, any, any>, res: Response) => {
-  const { value, error } = await UC.professorService.getList(req.query)
+  const { value, error } = await UC.classService.getList(req.query)
+  console.log(value)
+  console.log(error)
   if (error) {
     res.status(500).json(error || new Error('UC undefined error'))
     return
@@ -13,24 +15,8 @@ router.get('/', async (req: Request<any, any, any, any>, res: Response) => {
   res.status(200).json(value)
 })
 
-router.get(
-  '/university',
-  async (req: Request<any, any, any, any>, res: Response) => {
-    const { value, error } = await UC.professorService.getListByUniversity(
-      req.query
-    )
-
-    if (error) {
-      res.status(500).json(error || new Error('UC undefined error'))
-      return
-    }
-
-    res.status(200).json(value)
-  }
-)
-
 router.get('/:id', async (req, res) => {
-  const { value, error } = await UC.professorService.getByID(req.params.id)
+  const { value, error } = await UC.classService.getByID(req.params.id)
 
   if (error) {
     res.status(500).json(error || new Error('UC undefined error'))
@@ -41,7 +27,7 @@ router.get('/:id', async (req, res) => {
 })
 
 router.post('/', async (req, res) => {
-  const { value, error } = await UC.professorService.create(req.body)
+  const { value, error } = await UC.classService.create(req.body)
   if (error) {
     res.status(500).json(error || new Error('UC undefined error'))
     return
@@ -51,7 +37,7 @@ router.post('/', async (req, res) => {
 })
 
 router.put('/:id', async (req, res) => {
-  const { value, error } = await UC.professorService.update(req.body)
+  const { value, error } = await UC.classService.update(req.body)
 
   if (error) {
     res.status(500).json(error || new Error('UC undefined error'))
@@ -62,7 +48,7 @@ router.put('/:id', async (req, res) => {
 })
 
 router.delete('/:id', async (req, res) => {
-  const { value, error } = await UC.professorService.delete(req.params.id)
+  const { value, error } = await UC.classService.delete(req.params.id)
 
   if (error) {
     res.status(500).json(error || new Error('UC undefined error'))

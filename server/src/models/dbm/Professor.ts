@@ -5,7 +5,9 @@ import {
   OneToOne,
   JoinColumn,
   ManyToOne,
+  OneToMany,
 } from 'typeorm'
+import { Class } from './Class'
 import { Faculty } from './Faculty'
 
 import { User } from './User'
@@ -30,7 +32,10 @@ export class Professor {
   @Column()
   facultyId: string
 
-  @OneToOne(() => User, (user) => user.professor, { cascade: true })
+  @OneToOne(() => User, (user) => user.professor, {
+    cascade: true,
+    eager: true,
+  })
   @JoinColumn()
   user: User
 
@@ -38,4 +43,7 @@ export class Professor {
     eager: true,
   })
   faculty: Faculty
+
+  @OneToMany(() => Class, (classs) => classs.professor, { cascade: true })
+  classes: Class[]
 }

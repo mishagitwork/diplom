@@ -5,6 +5,7 @@ import {
   ManyToOne,
   OneToMany,
 } from 'typeorm'
+import { Class } from './Class'
 import { Faculty } from './Faculty'
 import { Student } from './Student'
 
@@ -38,4 +39,7 @@ export class Group {
 
   @OneToMany(() => Student, (student) => student.group, { cascade: true })
   students: Student[]
+
+  @OneToMany(() => Class, (classs) => classs.group, { cascade: true })
+  classes: Class[]
 }
