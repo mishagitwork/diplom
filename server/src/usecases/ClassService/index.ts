@@ -8,8 +8,8 @@ import {
 } from '@models/contracts/httpClient/ClassContracts'
 
 class ClassService implements IClassService {
-  getList = async (data: { groupId: string }) => {
-    const res = await R.db.clases.getListByGroup(data.groupId)
+  getList = async (data: { groupId?: string; professorId?: string }) => {
+    const res = await R.db.clases.getList(data)
 
     if (res.error) return { error: res.error }
     return { value: res.value }

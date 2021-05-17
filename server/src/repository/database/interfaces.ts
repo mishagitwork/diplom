@@ -106,7 +106,10 @@ export interface ISubjectsRepository {
 }
 
 export interface IClassesRepository {
-  getListByGroup: (groupId: string) => Promise<IFuncResultModel<Class[]>>
+  getList: (data: {
+    groupId?: string
+    professorId?: string
+  }) => Promise<IFuncResultModel<Class[]>>
   getByID: (id: string) => Promise<IFuncResultModel<Class>>
   create: (data: INewClassDTM) => Promise<IFuncResultModel<Class>>
   update: (id: string, data: INewClassDTM) => Promise<IFuncResultModel<Class>>

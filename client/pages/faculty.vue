@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.container">
     <div :class="$style.header">
-      <div class="title">Информация о факультетах</div>
+      <div :class="$style.title">Информация о факультетах</div>
       <a-button type="primary" @click="isOpen = true"> Создать </a-button>
     </div>
     <div class="list">

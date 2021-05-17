@@ -2,31 +2,8 @@
   <div :class="$style.container">
     <div :class="$style.header">
       <div :class="$style.title">Информация о занятиях</div>
-      <a-select
-        show-search
-        option-filter-prop="children"
-        :filter-option="filterOption"
-        v-model="selectFacultyId"
-        style="width: 100px"
-        @change="getGroups"
-      >
-        <a-select-option v-for="f in facultyList" :key="f.id" :value="f.id">
-          {{ f.shortName }}
-        </a-select-option>
-      </a-select>
-      <a-select
-        show-search
-        option-filter-prop="children"
-        :filter-option="filterOption"
-        v-model="selectGroupId"
-        style="width: 100px"
-        @change="getClasses"
-      >
-        <a-select-option v-for="g in groupsList" :key="g.id" :value="g.id">
-          {{ g.shortName }}
-        </a-select-option>
-      </a-select>
-      <a-button type="primary" @click="openStudentDrawer"> Создать </a-button>
+
+      <!-- <a-button type="primary" @click="openStudentDrawer"> Создать </a-button> -->
     </div>
     <div class="list">
       <a-list
@@ -35,8 +12,15 @@
         style="padding: 0.5rem 3rem"
       >
         <a-list-item slot="renderItem" slot-scope="item">
-          <a slot="actions">редактировать </a>
-          <a slot="actions"> удалить</a>
+          <a slot="actions">Список занятий </a>
+          <a slot="actions">
+            <a-popover v-model="item.start" trigger="click">
+              <a slot="content" @click="startClass(item.id)">Для всех</a>
+              <div slot="content" class="empty"></div>
+              <a slot="content" @click="item.start = false">Для некоторых</a>
+              Начать
+            </a-popover></a
+          >
           <a-list-item-meta :description="item.professor.user.fullName">
             <span slot="title">
               {{ item.subject.fullName + ' ' }}<b>{{ item.group.shortName }}</b>
@@ -49,7 +33,7 @@
         </a-list-item>
       </a-list>
     </div>
-    <a-drawer
+    <!-- <a-drawer
       title="Создать нового студента"
       :width="450"
       :visible="isOpen"
@@ -113,7 +97,7 @@
         </a-button>
         <a-button type="primary" @click="onSubmit"> Submit </a-button>
       </div>
-    </a-drawer>
+    </a-drawer> -->
   </div>
 </template>
 
@@ -122,44 +106,13 @@ import delivery from '@/delivery'
 export default {
   asyncData({ store }) {
     return Promise.all([
-      delivery.FacultyAction.getList({
-        universityId: store.state.user.universityId,
+      delivery.ClassAction.getList({
+        professorId: store.state.user.professorId,
       }),
     ])
       .then((res) => {
-        return Promise.all([
-          res[0],
-          delivery.GroupAction.getList({
-            facultyId: res[0].data[0].id,
-          }),
-        ])
-      })
-      .then((res) => {
-        return Promise.all([
-          res[0],
-          res[1],
-          delivery.ClassAction.getList({
-            groupId: res[1].data[0].id,
-          }),
-          delivery.SubjectAction.getList({
-            universityId: store.state.user.universityId,
-          }),
-          delivery.ProfessorAction.getListByUniversity({
-            universityId: store.state.user.universityId,
-          }),
-        ])
-      })
-
-      .then((res) => {
-        console.log(res[0].data[0])
         return {
-          selectFacultyId: res[0].data[0].id,
-          facultyList: res[0].data,
-          groupsList: res[1].data,
-          selectGroupId: res[1].data[0].id,
-          classesList: res[2].data,
-          subjectsList: res[3].data,
-          professorsList: res[4].data,
+          classesList: res[0].data,
         }
       })
       .catch((e) => {
@@ -179,6 +132,7 @@ export default {
       subjectsList: [],
       professorsList: [],
       rules: {},
+      start: false,
     }
   },
   computed: {
@@ -230,6 +184,11 @@ export default {
     async getClasses(value) {
       const res = await delivery.ClassAction.getList({ groupId: value })
       this.classesList = res.data
+    },
+    async startClass(value) {
+      const res = await delivery.ClassAction.start({ classId: value })
+      // this.classesList = res.data
+      console.log(res.data)
     },
   },
 }

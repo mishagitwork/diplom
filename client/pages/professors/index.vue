@@ -1,32 +1,32 @@
 <template>
   <div :class="$style.container">
     <div :class="$style.header">
-      <div class="title">Информация о группах</div>
+      <div :class="$style.title">Информация о преподавателях</div>
       <a-select
         show-search
         option-filter-prop="children"
         :filter-option="filterOption"
         v-model="selectFacultyId"
         style="width: 100px"
-        @change="getGroups"
+        @change="getProfessors"
       >
         <a-select-option v-for="f in facultyList" :key="f.id" :value="f.id">
           {{ f.shortName }}
         </a-select-option>
       </a-select>
-      <a-button type="primary" @click="isOpen = true"> Создать </a-button>
+      <a-button type="primary" @click="openDrawer"> Создать </a-button>
     </div>
     <div class="list">
       <a-list
         :item-layout="isMobile ? 'vertical' : 'horizontal'"
-        :data-source="groupsList"
+        :data-source="professorsList"
         style="padding: 0.5rem 3rem"
       >
         <a-list-item slot="renderItem" slot-scope="item">
           <a slot="actions">редактировать </a>
           <a slot="actions"> удалить</a>
-          <a-list-item-meta :description="item.fullName">
-            <span slot="title"> {{ item.shortName }}</span>
+          <a-list-item-meta :description="item.position">
+            <span slot="title"> {{ item.user.fullName }}</span>
             <a-avatar
               slot="avatar"
               src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
@@ -45,11 +45,11 @@
       <a-form-model ref="ruleForm" :model="form" :rules="rules">
         <a-form-model-item
           ref="fullName"
-          label="Полное название группы"
+          label="ФИО преподавателя"
           prop="fullName"
         >
           <a-input
-            v-model="form.fullName"
+            v-model="form.user.fullName"
             @blur="
               () => {
                 $refs.fullName.onFieldBlur()
@@ -57,16 +57,12 @@
             "
           />
         </a-form-model-item>
-        <a-form-model-item
-          ref="shortName"
-          label="Краткое название группы"
-          prop="shortName"
-        >
+        <a-form-model-item ref="position" label="Должность" prop="position">
           <a-input
-            v-model="form.shortName"
+            v-model="form.position"
             @blur="
               () => {
-                $refs.shortName.onFieldBlur()
+                $refs.position.onFieldBlur()
               }
             "
           />
@@ -78,23 +74,30 @@
             option-filter-prop="children"
             :filter-option="filterOption"
             v-model="form.facultyId"
-            @change="test"
           >
             <a-select-option v-for="f in facultyList" :key="f.id" :value="f.id">
               {{ f.fullName }}
             </a-select-option>
           </a-select>
         </a-form-model-item>
-        <a-form-model-item
-          ref="graduationDate"
-          label="Дата выпуска"
-          prop="graduationDate"
-        >
-          <a-date-picker
-            v-model="form.graduationDate"
-            format="YYYY-MM-DD"
-            :disabled-date="disabledDate"
-            :show-time="{ defaultValue: $moment('00:00:00', 'HH:mm:ss') }"
+        <a-form-model-item ref="login" label="Логин" prop="login">
+          <a-input
+            v-model="form.user.login"
+            @blur="
+              () => {
+                $refs.login.onFieldBlur()
+              }
+            "
+          />
+        </a-form-model-item>
+        <a-form-model-item ref="password" label="Пароль" prop="password">
+          <a-input
+            v-model="form.user.password"
+            @blur="
+              () => {
+                $refs.password.onFieldBlur()
+              }
+            "
           />
         </a-form-model-item>
       </a-form-model>
@@ -132,7 +135,7 @@ export default {
       .then((res) => {
         return Promise.all([
           res[0].data,
-          delivery.GroupAction.getList({
+          delivery.ProfessorAction.getList({
             facultyId: res[0].data[0].id,
           }),
         ])
@@ -142,7 +145,7 @@ export default {
         return {
           selectFacultyId: res[0][0].id,
           facultyList: res[0],
-          groupsList: res[1].data,
+          professorsList: res[1].data,
         }
       })
       .catch((e) => {
@@ -152,10 +155,10 @@ export default {
   data() {
     return {
       isOpen: false,
-      form: { fullName: '', shortName: '' },
+      form: { fullName: '', shortName: '', user: {} },
       selectFacultyId: '',
       facultyList: [],
-      groupsList: [],
+      professorsList: [],
       rules: {},
     }
   },
@@ -181,18 +184,15 @@ export default {
           .indexOf(input.toLowerCase()) >= 0
       )
     },
-    test() {
-      console.log(this.form.facultyId)
+    openDrawer() {
+      this.form.facultyId = this.selectFacultyId
+      this.isOpen = true
     },
+
     onSubmit() {
       this.$refs.ruleForm.validate(async (valid) => {
         if (valid) {
-          const data = {
-            fullName: this.form.fullName,
-            shortName: this.form.shortName,
-            facultyId: this.facultyId,
-          }
-          await delivery.GroupAction.create(this.form)
+          await delivery.ProfessorAction.create(this.form)
         } else {
           console.log('error submit!!')
           return false
@@ -202,13 +202,9 @@ export default {
     resetForm() {
       this.$refs.ruleForm.resetFields()
     },
-    async getGroups(value) {
-      const res = await delivery.GroupAction.getList({ facultyId: value })
-      this.groupsList = res.data
-    },
-    async getUniversity() {
-      const res = await delivery.UniversityAction.getList()
-      this.facultyList = res.data
+    async getProfessors(value) {
+      const res = await delivery.ProfessorAction.getList({ facultyId: value })
+      this.professorsList = res.data
     },
   },
 }

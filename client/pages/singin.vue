@@ -9,7 +9,7 @@
         </a-tooltip>
       </a-input>
       <a-input-password v-model="data.password" placeholder="Введите пароль" />
-      <a-button :disabled="isDisabled" block type="primary" @click="login">
+      <a-button :disabled="isDisabled" block type="primary" @click="onSubmit">
         Войти
       </a-button>
     </div>
@@ -17,8 +17,7 @@
 </template>
 
 <script>
-import delivery from '@/delivery'
-import { mapMutations } from 'vuex'
+import { mapMutations, mapActions } from 'vuex'
 export default {
   data() {
     return {
@@ -37,11 +36,16 @@ export default {
     ...mapMutations({
       initUser: 'user/initUser',
     }),
-    async login() {
-      const response = await delivery.AuthAction.login(this.data)
-      console.log(response)
-      if (!response) return
-      this.initUser(response)
+    ...mapActions({
+      login: 'auth/login',
+    }),
+    async onSubmit() {
+      const response = await this.login(this.data)
+      if (!response) {
+        this.$message.error('Произошла ошибка. Попробуйте еще раз')
+        return
+      }
+      this.$message.success('Вы успешно авторизировались')
       this.$router.push('/')
     },
   },

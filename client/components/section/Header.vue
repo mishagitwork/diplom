@@ -17,22 +17,39 @@
     >
       <a-menu mode="inline">
         <a-menu-item v-for="(m, i) in menu" :key="i" @click="onClose">
-          <a :href="m.route">
+          <nuxt-link :to="m.route">
             <a-icon :type="m.icon" />
             <span>{{ m.text }}</span>
-          </a>
+          </nuxt-link>
         </a-menu-item>
         <a-menu-item v-if="isAdmin" @click="onClose">
-          <a href="/university">
+          <nuxt-link to="/university">
             <a-icon type="bank" />
             <span>Университеты</span>
-          </a>
+          </nuxt-link>
         </a-menu-item>
-        <a-menu-item v-if="universityId" @click="onClose">
-          <a href="/faculty">
-            <a-icon type="bank" />
-            <span>Факультеты</span>
-          </a>
+
+        <a-menu-item
+          v-for="a in adminMenu"
+          v-show="universityId"
+          :key="a.route"
+          @click="onClose"
+        >
+          <nuxt-link :to="a.route">
+            <a-icon :type="a.icon" />
+            <span>{{ a.text }}</span>
+          </nuxt-link>
+        </a-menu-item>
+        <a-menu-item
+          v-for="a in professorMenu"
+          v-show="professorId"
+          :key="a.route"
+          @click="onClose"
+        >
+          <nuxt-link :to="a.route">
+            <a-icon :type="a.icon" />
+            <span>{{ a.text }}</span>
+          </nuxt-link>
         </a-menu-item>
       </a-menu>
     </a-drawer>
@@ -40,6 +57,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   data() {
     return {
@@ -51,20 +69,25 @@ export default {
         { icon: 'pie-chart', text: 'Считать QR', route: '/scaner' },
         { icon: 'pie-chart', text: 'Аналитика', route: '/analitics' },
       ],
+      adminMenu: [
+        { icon: 'bank', text: 'Факультеты', route: '/faculty' },
+        { icon: 'bank', text: 'Группы', route: '/groups' },
+        { icon: 'bank', text: 'Преподаватели', route: '/professors' },
+        { icon: 'bank', text: 'Предметы', route: '/subjects' },
+        { icon: 'bank', text: 'Занятия', route: '/class' },
+      ],
+      professorMenu: [
+        { icon: 'bank', text: 'Занятия', route: '/professors/class' },
+      ],
     }
   },
   computed: {
-    isAdmin() {
-      return this.$store.state.user.isAdmin
-    },
-  },
-  computed: {
-    isAdmin() {
-      return this.$store.state.user.isAdmin
-    },
-    universityId() {
-      return this.$store.state.user.universityId
-    },
+    ...mapState({
+      isAdmin: (state) => state.user.isAdmin,
+      universityId: (state) => state.user.universityId,
+      professorId: (state) => state.user.professorId,
+      studentId: (state) => state.user.studentId,
+    }),
   },
 
   methods: {

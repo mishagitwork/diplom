@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.container">
     <div :class="$style.header">
-      <div class="title">Информация о студентах</div>
+      <div :class="$style.title">Информация о студентах</div>
       <a-select
         show-search
         option-filter-prop="children"

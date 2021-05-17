@@ -17,6 +17,14 @@ class ClassAction {
       return new Error('Network error, try again late')
     }
   }
+  start = async (data) => {
+    try {
+      return await ApiConnector.connector.post('/classes', data)
+    } catch (e) {
+      console.error(e)
+      return new Error('Network error, try again late')
+    }
+  }
 }
 
 export default new ClassAction()

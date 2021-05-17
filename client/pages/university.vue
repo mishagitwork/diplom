@@ -1,7 +1,7 @@
 <template>
   <div :class="$style.container">
     <div :class="$style.header">
-      <div class="title">Информация о университетах</div>
+      <div :class="$style.title">Информация о университетах</div>
       <a-button type="primary" @click="isOpen = true"> Создать </a-button>
     </div>
     <div class="list">
@@ -22,7 +22,6 @@
               src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
             />
           </a-list-item-meta>
-          <!-- <div>content</div> -->
         </a-list-item>
       </a-list>
     </div>

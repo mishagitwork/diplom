@@ -12,6 +12,11 @@ import {
   IUpdateGroup,
 } from '@src/models/contracts/httpClient/GroupContracts'
 import {
+  IJWTResponse,
+  INewJWTToken,
+  INewJWTTokens,
+} from '@src/models/contracts/httpClient/JWTContracts'
+import {
   INewProfessor,
   IUpdateProfessor,
 } from '@src/models/contracts/httpClient/ProfessorContracts'
@@ -107,9 +112,30 @@ export interface ISubjectService {
 }
 
 export interface IClassService {
-  getList: (data: { groupId: string }) => Promise<IFuncResultModel<Class[]>>
+  getList: (data: {
+    groupId?: string
+    professorId?: string
+  }) => Promise<IFuncResultModel<Class[]>>
   getByID: (id: string) => Promise<IFuncResultModel<Class>>
   create: (data: INewClass) => Promise<IFuncResultModel<Class>>
   update: (data: IUpdateClass) => Promise<IFuncResultModel<Class>>
   delete: (id: string) => Promise<IFuncResultModel<boolean>>
+}
+
+export interface IJwtService {
+  generateToken: (
+    data: INewJWTToken
+  ) => Promise<IFuncResultModel<{ token: string }>>
+  generateTokens: (
+    data: INewJWTTokens
+  ) => Promise<IFuncResultModel<IJWTResponse>>
+  verify: (token: string) => Promise<any>
+}
+
+export interface IAuthService {
+  login: (data: {
+    login: string
+    password: string
+  }) => Promise<IFuncResultModel<IJWTResponse>>
+  refresh: (token: string) => Promise<IFuncResultModel<IJWTResponse>>
 }

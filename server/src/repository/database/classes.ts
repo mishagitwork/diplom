@@ -6,11 +6,11 @@ import { INewClassDTM } from '@models/dtm/ClassDTM'
 import DBConnector from '@src/repository/database/connector'
 
 class ClassesRepository implements IClassesRepository {
-  getListByGroup = async (groupId: string) => {
+  getList = async (data: { groupId?: string; professorId?: string }) => {
     try {
       const response = await DBConnector.connector?.getRepository(Class).find({
         relations: ['group', 'professor', 'subject'],
-        where: { groupId },
+        where: { ...data },
       })
       console.log(response)
       return { value: response }

@@ -28,6 +28,21 @@ router.get(
     res.status(200).json(value)
   }
 )
+router.get(
+  '/university',
+  async (req: Request<any, any, any, any>, res: Response) => {
+    const { value, error } = await UC.professorService.getListByUniversity(
+      req.query
+    )
+
+    if (error) {
+      res.status(500).json(error || new Error('UC undefined error'))
+      return
+    }
+
+    res.status(200).json(value)
+  }
+)
 
 router.get('/:id', async (req, res) => {
   const { value, error } = await UC.professorService.getByID(req.params.id)
