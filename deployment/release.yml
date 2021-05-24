@@ -9,7 +9,7 @@ services:
     environment:
       API_URL: http://185.66.71.136:6501
     ports:
-      - 6500:80
+      - 6500:3000
 
   MP-CORE:
     container_name: MP-CORE
