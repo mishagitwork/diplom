@@ -21,5 +21,6 @@ services:
       DB_USER: WebDad
       DB_PASSWORD: SWdYfZdqCDb3AVKwJDbFEMc3
       DB_DB: mp-release
+      JWT_TOKEN_SECRET: xZaLmr1x9BzaDCLB7LeCpbFEUa0HtWEFvU
     ports:
       - 6501:4000
