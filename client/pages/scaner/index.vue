@@ -15,10 +15,10 @@
       </p>
     </a-modal>
     <p class="error">{{ error }}</p>
-
+    <!-- 
     <p class="decode-result">
       Last result: <b>{{ result }}</b>
-    </p>
+    </p> -->
 
     <qrcode-stream
       v-if="isAgree"
@@ -27,15 +27,20 @@
       @init="onInit"
     >
       <div v-if="validationSuccess" :class="$style.validationSuccess">
-        This is a URL
+        Операция прошла успешно
       </div>
 
       <div v-if="validationFailure" :class="$style.validationFailure">
-        This is NOT a URL!
+        Произошла ошибка
+        <div class="buttons">
+          <a-button type="default">На главную</a-button>
+          <span> </span>
+          <a-button type="primary">Повторить</a-button>
+        </div>
       </div>
 
       <div v-if="validationPending" :class="$style.validationPending">
-        Long validation in progress...
+        Ожидание...
       </div>
     </qrcode-stream>
   </div>
@@ -80,14 +85,6 @@ export default {
   },
 
   methods: {
-    // async camera() {
-    //   this.stream = await navigator.mediaDevices.getUserMedia({
-    //     audio: false,
-    //     video: {
-    //       facingMode: 'environment',
-    //     },
-    //   })
-    // },
     agree() {
       // this.getGeoLocation()
       this.isOpen = false
@@ -109,7 +106,7 @@ export default {
     },
 
     async onDecode(result) {
-      //this.camera = 'off'
+      this.camera = 'off'
       this.result = result
       if (result.startsWith('1111')) {
         const res = await delivery.AttendanceAction.updateByStudent({
@@ -117,8 +114,9 @@ export default {
           studentId: this.studentId,
           coords: this.coords,
         })
+        this.isValid = !!res
         console.log(res)
-        this.isValid = true
+        // this.isValid = true
       } else {
         this.isValid = false
       }
@@ -172,6 +170,7 @@ export default {
     display: flex;
     flex-flow: column nowrap;
     justify-content: center;
+    align-items: center;
   }
   .validationSuccess {
     color: green;
