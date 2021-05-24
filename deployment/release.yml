@@ -1,7 +1,7 @@
 version: '3.7'
 
 services:
-  VS-ADMIN:
+  MP-WEB:
     container_name: MP-WEB
     build: ../client
     image: mp-web:latest
@@ -11,7 +11,7 @@ services:
     ports:
       - 6500:80
 
-  VS-CORE:
+  MP-CORE:
     container_name: MP-CORE
     build: ../server
     image: mp-core:latest
