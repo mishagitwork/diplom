@@ -4,9 +4,10 @@ export const state = () => ({
   avatar: null,
   isAdmin: false,
   userId: null,
-  universityId: 'dd6308e8-f9c3-4354-9b9f-95105d86ffaa',
+  universityId: null,
   professorId: null,
   studentId: null,
+  groupId: null,
 })
 
 export const mutations = {
@@ -18,5 +19,6 @@ export const mutations = {
     state.professorId = data.professorId
     state.universityId = data.universityId
     state.studentId = data.studentId
+    state.groupId = data.groupId
   },
 }

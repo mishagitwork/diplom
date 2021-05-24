@@ -16,7 +16,6 @@ router.get('/', async (req: Request<any, any, any, any>, res: Response) => {
 
 router.get('/:id', async (req, res) => {
   const { value, error } = await UC.studentService.getByID(req.params.id)
-
   if (error) {
     res.status(500).json(error || new Error('UC undefined error'))
     return

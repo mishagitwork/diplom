@@ -14,10 +14,12 @@
     "@nuxtjs/pwa": "^3.3.5",
     "@nuxtjs/style-resources": "^1.0.0",
     "ant-design-vue": "^1.7.4",
+    "chart.js": "^2.9.4",
     "core-js": "^3.9.1",
     "jwt-decode": "^3.1.2",
     "nuxt": "^2.15.3",
     "qrcode": "^1.4.4",
+    "vue-chartjs": "^3.5.1",
     "vue-qrcode-reader": "^2.3.18"
   },
   "devDependencies": {

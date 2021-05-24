@@ -46,7 +46,7 @@ export class User {
   @OneToOne(() => Professor, (professor) => professor.user)
   professor: Professor
 
-  @OneToOne(() => Student, (student) => student.user)
+  @OneToOne(() => Student, (student) => student.user, { cascade: true })
   student: Student
 
   @BeforeInsert()

@@ -15,6 +15,7 @@ class AuthService implements IAuthService {
       universityId: user.value.university?.id,
       professorId: user.value.professor?.id,
       studentId: user.value.student?.id,
+      groupId: user.value.student?.groupId,
       isMonitor: user.value.student?.isMonitor,
       isAdmin: user.value.isAdmin,
     })
@@ -27,7 +28,7 @@ class AuthService implements IAuthService {
     if (decoded.error || !decoded.value) {
       return { error: new Error('JWT not founded') }
     }
-    const user = await UC.userService.getByID(decoded.id)
+    const user = await R.db.users.getByID(decoded.value.userId)
     if (user.error || !user.value) {
       return { error: new Error('User not founded') }
     }
@@ -38,6 +39,7 @@ class AuthService implements IAuthService {
       universityId: user.value.university?.id,
       professorId: user.value.professor?.id,
       studentId: user.value.student?.id,
+      groupId: user.value.student?.groupId,
       isMonitor: user.value.student?.isMonitor,
       isAdmin: user.value.isAdmin,
     })

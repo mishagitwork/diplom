@@ -9,6 +9,8 @@ import StudentAction from './StudentAction'
 import ProfessorAction from './ProfessorAction'
 import SubjectAction from './SubjectAction'
 import ClassAction from './ClassAction'
+import AttendanceAction from './AttendanceAction'
+import AnalyticAction from './AnalyticAction'
 
 class DeliveryLayer {
   connector = connector
@@ -21,6 +23,8 @@ class DeliveryLayer {
   ProfessorAction = ProfessorAction
   SubjectAction = SubjectAction
   ClassAction = ClassAction
+  AttendanceAction = AttendanceAction
+  AnalyticAction = AnalyticAction
 }
 
 export default new DeliveryLayer()

@@ -5,11 +5,11 @@ import {
   TableForeignKey,
 } from 'typeorm'
 
-export class CreateClassTable202129051640000 implements MigrationInterface {
+export class CreateAttendanceTable20212905165000 implements MigrationInterface {
   async up(queryRunner: QueryRunner): Promise<void> {
     await queryRunner.createTable(
       new Table({
-        name: 'classes',
+        name: 'attendance',
         columns: [
           {
             name: 'id',
@@ -29,17 +29,22 @@ export class CreateClassTable202129051640000 implements MigrationInterface {
             default: 'now()',
           },
           {
-            name: 'groupId',
+            name: 'expiredAt',
+            type: 'timestamptz',
+            default: 'now()',
+          },
+          {
+            name: 'isAttended',
+            type: 'boolean',
+            default: false,
+          },
+          {
+            name: 'classId',
             type: 'varchar',
             isNullable: false,
           },
           {
-            name: 'professorId',
-            type: 'varchar',
-            isNullable: false,
-          },
-          {
-            name: 'subjectId',
+            name: 'studentId',
             type: 'varchar',
             isNullable: false,
           },
@@ -48,28 +53,19 @@ export class CreateClassTable202129051640000 implements MigrationInterface {
       true
     )
     await queryRunner.createForeignKey(
-      'classes',
+      'attendance',
       new TableForeignKey({
-        columnNames: ['groupId'],
-        referencedTableName: 'groups',
+        columnNames: ['classId'],
+        referencedTableName: 'classes',
         referencedColumnNames: ['id'],
         onDelete: 'CASCADE',
       })
     )
     await queryRunner.createForeignKey(
-      'classes',
+      'attendance',
       new TableForeignKey({
-        columnNames: ['professorId'],
-        referencedTableName: 'professors',
-        referencedColumnNames: ['id'],
-        onDelete: 'CASCADE',
-      })
-    )
-    await queryRunner.createForeignKey(
-      'classes',
-      new TableForeignKey({
-        columnNames: ['subjectId'],
-        referencedTableName: 'subjects',
+        columnNames: ['studentId'],
+        referencedTableName: 'students',
         referencedColumnNames: ['id'],
         onDelete: 'CASCADE',
       })
@@ -77,6 +73,6 @@ export class CreateClassTable202129051640000 implements MigrationInterface {
   }
 
   async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropTable('classes')
+    await queryRunner.dropTable('attendance')
   }
 }

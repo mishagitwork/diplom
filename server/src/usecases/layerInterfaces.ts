@@ -1,5 +1,10 @@
 import { IFuncResultModel } from '@src/models/common/FuncResultModel'
 import {
+  INewAttendance,
+  IUpdateAttendance,
+  IUpdateByStudentAttendance,
+} from '@src/models/contracts/httpClient/AttendanceContracts'
+import {
   INewClass,
   IUpdateClass,
 } from '@src/models/contracts/httpClient/ClassContracts'
@@ -37,6 +42,7 @@ import {
   INewUser,
   IUpdateUser,
 } from '@src/models/contracts/httpClient/UserContracts'
+import { Attendance } from '@src/models/dbm/Attendance'
 import { Class } from '@src/models/dbm/Class'
 import { Faculty } from '@src/models/dbm/Faculty'
 import { Group } from '@src/models/dbm/Group'
@@ -122,6 +128,23 @@ export interface IClassService {
   delete: (id: string) => Promise<IFuncResultModel<boolean>>
 }
 
+export interface IAttendanceService {
+  getList: (data: {
+    classId?: string
+    expiredAt?: Date
+  }) => Promise<IFuncResultModel<Attendance[]>>
+  getUniqueList: (data: {
+    classId?: string
+  }) => Promise<IFuncResultModel<Attendance[]>>
+  getByID: (id: string) => Promise<IFuncResultModel<Attendance>>
+  create: (data: INewAttendance) => Promise<IFuncResultModel<Attendance[]>>
+  update: (data: IUpdateAttendance) => Promise<IFuncResultModel<Attendance>>
+  updateByStudent: (
+    data: IUpdateByStudentAttendance
+  ) => Promise<IFuncResultModel<Attendance>>
+  delete: (id: string) => Promise<IFuncResultModel<boolean>>
+}
+
 export interface IJwtService {
   generateToken: (
     data: INewJWTToken
@@ -138,4 +161,13 @@ export interface IAuthService {
     password: string
   }) => Promise<IFuncResultModel<IJWTResponse>>
   refresh: (token: string) => Promise<IFuncResultModel<IJWTResponse>>
+}
+
+export interface IAnalysticService {
+  countByAttended: (
+    studentId: string
+  ) => Promise<IFuncResultModel<{ isAttended: boolean; count: number }[]>>
+  countByClassAttended: (
+    studentId: string
+  ) => Promise<IFuncResultModel<{ shortName: string; count: number }[]>>
 }

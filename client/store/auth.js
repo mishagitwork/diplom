@@ -2,9 +2,8 @@ import delivery from '@/delivery'
 
 export const state = () => {
   return {
-    userId: '',
-    refreshToken: process.browser ? localStorage.getItem('refreshToken') : '',
-    accessToken: process.browser ? localStorage.getItem('accessToken') : '',
+    refreshToken: '',
+    accessToken: '',
   }
 }
 
@@ -32,6 +31,7 @@ export const actions = {
   logout({ commit }) {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
+    commit('user/init', { userId: null }, { root: true })
     commit('setTokens', { accessToken: null, refreshToken: null })
     this.$router.push('/singin')
   },
@@ -44,12 +44,16 @@ export const actions = {
   },
   refreshToken({ dispatch }) {
     const refreshToken = localStorage.getItem('refreshToken')
-    delivery.AuthAction.refresh(refreshToken)
-      .then((res) => dispatch('refreshTokenTimeout', res))
-      .catch((e) => {
-        console.error(e)
-        dispatch('logout')
-      })
+    if (refreshToken) {
+      delivery.AuthAction.refresh(refreshToken)
+        .then((res) => dispatch('refreshTokenTimeout', res))
+        .catch((e) => {
+          console.error(e)
+          dispatch('logout')
+        })
+    } else {
+      dispatch('logout')
+    }
   },
   refreshTokenTimeout({ dispatch, commit }, data) {
     localStorage.setItem('accessToken', data.accessToken)

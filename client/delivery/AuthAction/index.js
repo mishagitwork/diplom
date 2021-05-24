@@ -16,9 +16,11 @@ class AuthAction {
   }
   refresh = async (token) => {
     try {
+      console.log(token)
       const response = await ApiConnector.connector.post('/auth/refresh', {
         token,
       })
+      console.log(response)
       if (!response) {
         return new Error('Network error, try again late')
       }

@@ -1,4 +1,5 @@
 import { IFuncResultModel } from '@models/common/FuncResultModel'
+import { Attendance } from '@src/models/dbm/Attendance'
 import { Class } from '@src/models/dbm/Class'
 import { Faculty } from '@src/models/dbm/Faculty'
 import { Group } from '@src/models/dbm/Group'
@@ -7,6 +8,10 @@ import { Student } from '@src/models/dbm/Student'
 import { Subject } from '@src/models/dbm/Subject'
 import { University } from '@src/models/dbm/University'
 import { User } from '@src/models/dbm/User'
+import {
+  INewAttendanceDTM,
+  IUpdateByStudentAttendanceDTM,
+} from '@src/models/dtm/AttendanceDTM'
 import { INewClassDTM } from '@src/models/dtm/ClassDTM'
 import { INewFacultyDTM } from '@src/models/dtm/FacultyDTM'
 import { INewGroupDTM } from '@src/models/dtm/GroupDTM'
@@ -30,6 +35,7 @@ export default interface IDB {
   professors: IProfessorsRepository
   subjects: ISubjectsRepository
   clases: IClassesRepository
+  attendance: IAttendancesRepository
 }
 
 export interface IUsersRepository {
@@ -114,4 +120,24 @@ export interface IClassesRepository {
   create: (data: INewClassDTM) => Promise<IFuncResultModel<Class>>
   update: (id: string, data: INewClassDTM) => Promise<IFuncResultModel<Class>>
   delete: (id: string) => Promise<IFuncResultModel<boolean>>
+}
+
+export interface IAttendancesRepository {
+  getList: (data: {
+    classId?: string
+    expiredAt?: Date
+  }) => Promise<IFuncResultModel<Attendance[]>>
+  getByID: (id: string) => Promise<IFuncResultModel<Attendance>>
+  create: (data: INewAttendanceDTM[]) => Promise<IFuncResultModel<Attendance[]>>
+  update: (id: string, data: any) => Promise<IFuncResultModel<Attendance>>
+  updateByStudent: (
+    data: IUpdateByStudentAttendanceDTM
+  ) => Promise<IFuncResultModel<Attendance>>
+  delete: (id: string) => Promise<IFuncResultModel<boolean>>
+  count: (
+    studentId: string
+  ) => Promise<IFuncResultModel<{ isAttended: boolean; count: number }[]>>
+  countByClassAttended: (
+    studentId: string
+  ) => Promise<IFuncResultModel<{ shortName: string; count: number }[]>>
 }

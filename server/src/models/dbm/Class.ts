@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm'
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  OneToMany,
+} from 'typeorm'
+import { Attendance } from './Attendance'
 
 import { Group } from './Group'
 import { Professor } from './Professor'
@@ -23,6 +30,9 @@ export class Class {
 
   @Column()
   subjectId: string
+
+  @OneToMany(() => Attendance, (attendance) => attendance.class)
+  attendance: Attendance[]
 
   @ManyToOne(() => Group, (group) => group.classes, {
     eager: true,

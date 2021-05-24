@@ -5,7 +5,7 @@ class ApiConnector {
   token = null
 
   constructor() {
-    this.connector = Axios.create()
+    this.connector = Axios.create({})
 
     this.connector.interceptors.request.use((config) => {
       const newConfig = { ...config }

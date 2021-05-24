@@ -17,6 +17,7 @@ export default {
     '@/plugins/antd-ui',
     { src: '@/plugins/vue-qrcode-reader', mode: 'client' },
     { src: '@/plugins/vue-qrcode', mode: 'client' },
+    // { src: '~plugins/vue-chartjs.js', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
@@ -48,9 +49,9 @@ export default {
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
-    manifest: {
-      lang: 'en',
-    },
+    // workbox: {
+    //   enable: false,
+    // },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

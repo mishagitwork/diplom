@@ -19,6 +19,7 @@
 <script>
 import { mapMutations, mapActions } from 'vuex'
 export default {
+  // middleware: 'isAuth',
   data() {
     return {
       data: {
@@ -57,7 +58,8 @@ export default {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: calc(100% - 5rem);
+  height: calc(100% - 10rem);
+  padding: 0 1rem;
   .wrapper {
     display: flex;
     flex-direction: column;

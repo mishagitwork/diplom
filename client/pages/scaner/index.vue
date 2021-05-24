@@ -1,18 +1,50 @@
 <template>
-  <div>
+  <div :class="$style.container">
+    <a-modal
+      v-model="isOpen"
+      title="Предупреждение"
+      :ok-button-props="{ props: { disabled: !coords } }"
+      @ok="agree"
+    >
+      <p>
+        Для продолжения необходимо дать приложению разрешение на доступ к камере
+        и геолокации.
+      </p>
+      <p>
+        Разрешить доступ к геолокации <a @click="getGeoLocation">Разрешить </a>
+      </p>
+    </a-modal>
     <p class="error">{{ error }}</p>
 
     <p class="decode-result">
       Last result: <b>{{ result }}</b>
     </p>
 
-    <qrcode-stream @decode="onDecode" @init="onInit" />
+    <qrcode-stream
+      v-if="isAgree"
+      :camera="camera"
+      @decode="onDecode"
+      @init="onInit"
+    >
+      <div v-if="validationSuccess" :class="$style.validationSuccess">
+        This is a URL
+      </div>
+
+      <div v-if="validationFailure" :class="$style.validationFailure">
+        This is NOT a URL!
+      </div>
+
+      <div v-if="validationPending" :class="$style.validationPending">
+        Long validation in progress...
+      </div>
+    </qrcode-stream>
   </div>
 </template>
 
 <script>
 // import { QrcodeStream } from '../../../../src'
-
+import delivery from '@/delivery'
+import { mapState } from 'vuex'
 export default {
   //   components: { QrcodeStream },
 
@@ -20,12 +52,79 @@ export default {
     return {
       result: '',
       error: '',
+      isOpen: true,
+      isAgree: false,
+      coords: '',
+      camera: 'auto',
+      isValid: undefined,
     }
+  },
+  computed: {
+    ...mapState({
+      // isAdmin: (state) => state.user.isAdmin,
+      // universityId: (state) => state.user.universityId,
+      // professorId: (state) => state.user.professorId,
+      studentId: (state) => state.user.studentId,
+    }),
+    validationPending() {
+      return this.isValid === undefined && this.camera === 'off'
+    },
+
+    validationSuccess() {
+      return this.isValid === true
+    },
+
+    validationFailure() {
+      return this.isValid === false
+    },
   },
 
   methods: {
-    onDecode(result) {
+    // async camera() {
+    //   this.stream = await navigator.mediaDevices.getUserMedia({
+    //     audio: false,
+    //     video: {
+    //       facingMode: 'environment',
+    //     },
+    //   })
+    // },
+    agree() {
+      // this.getGeoLocation()
+      this.isOpen = false
+      this.isAgree = true
+    },
+    getGeoLocation() {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          this.coords = {
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+          }
+        },
+        (error) => {
+          this.coords = false
+          console.log(error.message)
+        }
+      )
+    },
+
+    async onDecode(result) {
+      //this.camera = 'off'
       this.result = result
+      if (result.startsWith('1111')) {
+        const res = await delivery.AttendanceAction.updateByStudent({
+          classId: result.slice(5),
+          studentId: this.studentId,
+          coords: this.coords,
+        })
+        console.log(res)
+        this.isValid = true
+      } else {
+        this.isValid = false
+      }
+      await setTimeout(() => {}, 5000)
+      console.log(this.result)
+      //this.camera = 'auto'
     },
 
     async onInit(promise) {
@@ -51,9 +150,34 @@ export default {
 }
 </script>
 
-<style scoped>
+<style module lang="scss">
 .error {
   font-weight: bold;
   color: red;
+}
+.container {
+  .validationSuccess,
+  .validationFailure,
+  .validationPending {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+
+    background-color: rgba(255, 255, 255, 0.8);
+    text-align: center;
+    font-weight: bold;
+    font-size: 1.4rem;
+    padding: 10px;
+
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+  }
+  .validationSuccess {
+    color: green;
+  }
+  .validationFailure {
+    color: red;
+  }
 }
 </style>

@@ -14,6 +14,8 @@ import {
   IClassService,
   IJwtService,
   IAuthService,
+  IAttendanceService,
+  IAnalysticService,
 } from './layerInterfaces'
 import StudentService from './StudentService'
 import ProfessorService from './ProfessorService'
@@ -21,6 +23,8 @@ import SubjectService from './SubjectService'
 import ClassService from './ClassService'
 import JwtService from './JwtService'
 import AuthService from './AuthService'
+import AttendanceService from './AttendanceService'
+import AnalysticService from './AnalyticService'
 
 class UseCases {
   userService: IUserService
@@ -31,8 +35,10 @@ class UseCases {
   professorService: IProfessorService
   subjectService: ISubjectService
   classService: IClassService
+  attendanceService: IAttendanceService
   jwtService: IJwtService
   authService: IAuthService
+  analyticService: IAnalysticService
   constructor() {
     this.userService = UserService
     this.universityService = UniversityService
@@ -42,8 +48,10 @@ class UseCases {
     this.professorService = ProfessorService
     this.subjectService = SubjectService
     this.classService = ClassService
+    this.attendanceService = AttendanceService
     this.jwtService = JwtService
     this.authService = AuthService
+    this.analyticService = AnalysticService
   }
 }
 

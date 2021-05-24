@@ -17,6 +17,15 @@ class StudentAction {
       return new Error('Network error, try again late')
     }
   }
+
+  getByID = async (data) => {
+    try {
+      return await ApiConnector.connector.get('/students/' + data.studentId)
+    } catch (e) {
+      console.error(e)
+      return new Error('Network error, try again late')
+    }
+  }
 }
 
 export default new StudentAction()

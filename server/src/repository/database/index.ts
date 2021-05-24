@@ -7,6 +7,7 @@ import StudentsRepository from './students'
 import ProfessorsRepository from './professors'
 import SubjectsRepository from './subjects'
 import ClassesRepository from './classes'
+import AttendancesRepository from './attendance'
 
 import IDB, {
   IConnector,
@@ -18,6 +19,7 @@ import IDB, {
   IProfessorsRepository,
   ISubjectsRepository,
   IClassesRepository,
+  IAttendancesRepository,
 } from './interfaces'
 
 class DB implements IDB {
@@ -30,6 +32,7 @@ class DB implements IDB {
   professors: IProfessorsRepository
   subjects: ISubjectsRepository
   clases: IClassesRepository
+  attendance: IAttendancesRepository
   constructor() {
     this.connector = connector
     this.users = UsersRepository
@@ -40,6 +43,7 @@ class DB implements IDB {
     this.professors = ProfessorsRepository
     this.subjects = SubjectsRepository
     this.clases = ClassesRepository
+    this.attendance = AttendancesRepository
   }
 }
 

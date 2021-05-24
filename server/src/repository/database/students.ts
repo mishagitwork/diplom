@@ -23,6 +23,7 @@ class StudentsRepository implements IStudentsRepository {
       const response = await DBConnector.connector
         ?.getRepository(Student)
         .findOne(id)
+
       if (!response) return { error: new Error('not found') }
       return { value: response }
     } catch (e) {

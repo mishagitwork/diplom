@@ -92,7 +92,6 @@
             option-filter-prop="children"
             :filter-option="filterOption"
             v-model="form.facultyId"
-            @change="test"
           >
             <a-select-option v-for="f in facultyList" :key="f.id" :value="f.id">
               {{ f.fullName }}

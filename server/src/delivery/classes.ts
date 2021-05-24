@@ -5,8 +5,6 @@ const router: Router = express.Router()
 
 router.get('/', async (req: Request<any, any, any, any>, res: Response) => {
   const { value, error } = await UC.classService.getList(req.query)
-  console.log(value)
-  console.log(error)
   if (error) {
     res.status(500).json(error || new Error('UC undefined error'))
     return

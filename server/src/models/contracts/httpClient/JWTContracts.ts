@@ -4,6 +4,7 @@ export interface INewJWTTokens {
   universityId: string
   professorId: string
   studentId: string
+  groupId: string
   isMonitor: boolean
   isAdmin: boolean
 }

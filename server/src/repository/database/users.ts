@@ -19,11 +19,10 @@ class UsersRepository implements IUsersRepository {
     try {
       const response = await DBConnector.connector
         ?.getRepository(User)
-        .findOne({
-          where: id,
+        .findOneOrFail({
+          where: { id },
           relations: ['university', 'student', 'professor'],
         })
-      if (!response) return { error: new Error('not found') }
       return { value: response }
     } catch (e) {
       return { error: e }
