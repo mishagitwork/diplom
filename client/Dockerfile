@@ -14,5 +14,5 @@ RUN apk --no-cache add --virtual native-deps \
 ADD . ${APP_ROOT}
 RUN npm run build
 
-EXPOSE 80
+EXPOSE 3000
 CMD ["npm", "run", "start"]
