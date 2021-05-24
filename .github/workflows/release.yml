@@ -19,7 +19,7 @@ jobs:
           remote: /var/www/MProject/Release
           host: ${{ secrets.MP_SSH_HOST }}
           port: ${{ secrets.MP_SSH_PORT }}
-          username: ubuntu
+          username: root
           privateKey: ${{ secrets.MP_SSH_KEY }}
 
       - name: Rebuild and Restart containers
@@ -34,5 +34,5 @@ jobs:
             rm -r client
           host: ${{ secrets.MP_SSH_HOST }}
           port: ${{ secrets.MP_SSH_PORT }}
-          username: ubuntu
+          username: root
           privateKey: ${{ secrets.MP_SSH_KEY }}
