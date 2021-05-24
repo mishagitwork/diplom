@@ -1,0 +1,25 @@
+version: '3.7'
+
+services:
+  VS-ADMIN:
+    container_name: MP-WEB
+    build: ../client
+    image: mp-web:latest
+    restart: always
+    environment:
+      BE_URL: http://185.66.71.136:6501
+    ports:
+      - 6500:80
+
+  VS-CORE:
+    container_name: MP-CORE
+    build: ../server
+    image: mp-core:latest
+    restart: always
+    environment:
+      DB_HOST: 185.66.71.58
+      DB_USER: WebDad
+      DB_PASSWORD: SWdYfZdqCDb3AVKwJDbFEMc3
+      DB_DB: mp-release
+    ports:
+      - 6501:4000
