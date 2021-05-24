@@ -12,19 +12,19 @@ export default {
 
   // Global CSS: https://go.nuxtjs.dev/config-css
   css: ['ant-design-vue/dist/antd.css'],
-
   // Plugins to run before rendering page: https://go.nuxtjs.dev/config-plugins
   plugins: [
     '@/plugins/antd-ui',
     { src: '@/plugins/vue-qrcode-reader', mode: 'client' },
     { src: '@/plugins/vue-qrcode', mode: 'client' },
+    // { src: '~plugins/vue-chartjs.js', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components
   components: true,
 
   // Modules for dev and build (recommended): https://go.nuxtjs.dev/config-modules
-  buildModules: [],
+  buildModules: ['@nuxtjs/moment'],
 
   // Modules: https://go.nuxtjs.dev/config-modules
   modules: [
@@ -32,16 +32,26 @@ export default {
     '@nuxtjs/axios',
     // https://go.nuxtjs.dev/pwa
     '@nuxtjs/pwa',
+    '@nuxtjs/style-resources',
   ],
+  styleResources: {
+    scss: ['~/assets/styles/common.scss, ~/assets/styles/breakpoints.scss'],
+  },
 
   // Axios module configuration: https://go.nuxtjs.dev/config-axios
-  axios: {},
+  axios: {
+    proxy: true,
+  },
+
+  proxy: {
+    '/api/': process.env['API_URL'] || 'http://localhost:4000/',
+  },
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
-    manifest: {
-      lang: 'en',
-    },
+    // workbox: {
+    //   enable: false,
+    // },
   },
 
   // Build Configuration: https://go.nuxtjs.dev/config-build

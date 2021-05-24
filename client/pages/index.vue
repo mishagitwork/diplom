@@ -1,73 +1,37 @@
 <template>
-  <div class="container">
-    <div>
-      <Logo />
-      <h1 class="title">
-        PWA
-      </h1>
-      <div class="links">
-        <a
-          href="https://nuxtjs.org/"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--green"
-        >
-          Documentation
-        </a>
-        <a
-          href="https://github.com/nuxt/nuxt.js"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="button--grey"
-        >
-          GitHub
-        </a>
-      </div>
+  <div :class="$style.container">
+    <h2>Добро пожаловать,{{ fullName }}</h2>
+    <div v-if="studentId" class="student">
+      Вы успешно авторизировались в качестве <u> студента</u>. Данная система
+      предназначена для учета и контроля посещаемости.
     </div>
   </div>
 </template>
 
 <script>
-export default {}
+import { mapState } from 'vuex'
+export default {
+  computed: {
+    ...mapState({
+      isAdmin: (state) => state.user.isAdmin,
+      universityId: (state) => state.user.universityId,
+      professorId: (state) => state.user.professorId,
+      studentId: (state) => state.user.studentId,
+      isMobile: (state) => state.layout.isMobile,
+      fullName: (state) => state.user.fullName,
+    }),
+  },
+}
 </script>
 
-<style>
+<style module lang="scss">
 .container {
-  margin: 0 auto;
-  min-height: 100vh;
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
-}
-
-.title {
-  font-family:
-    'Quicksand',
-    'Source Sans Pro',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    'Helvetica Neue',
-    Arial,
-    sans-serif;
-  display: block;
-  font-weight: 300;
-  font-size: 100px;
-  color: #35495e;
-  letter-spacing: 1px;
-}
-
-.subtitle {
-  font-weight: 300;
-  font-size: 42px;
-  color: #526488;
-  word-spacing: 5px;
-  padding-bottom: 15px;
-}
-
-.links {
-  padding-top: 15px;
+  padding: 0 1rem;
+  height: calc(100% - 10rem);
 }
 </style>

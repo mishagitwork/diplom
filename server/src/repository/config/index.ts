@@ -1,7 +1,13 @@
 import dotenv from 'dotenv'
 
 class Config {
-  ConfigNames: string[] = ['DB_HOST', 'DB_USER', 'DB_PASSWORD', 'DB_DB']
+  ConfigNames: string[] = [
+    'DB_HOST',
+    'DB_USER',
+    'DB_PASSWORD',
+    'DB_DB',
+    'JWT_TOKEN_SECRET',
+  ]
   config: { [key: string]: string } = {}
 
   constructor() {
