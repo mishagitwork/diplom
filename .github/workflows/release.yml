@@ -29,9 +29,6 @@ jobs:
             cd /var/www/MProject/Release/deployment
             docker-compose -f release.yml build
             docker-compose -f release.yml up -d
-            cd ../
-            rm -r server
-            rm -r client
           host: ${{ secrets.MP_SSH_HOST }}
           port: ${{ secrets.MP_SSH_PORT }}
           username: root
