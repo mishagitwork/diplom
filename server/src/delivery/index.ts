@@ -14,11 +14,6 @@ import AnalyticsRoutes from './analytics'
 
 const app: express.Application = express()
 
-app.use((req, res, next) => {
-  console.log(req.body)
-  next()
-})
-
 app.use(bodyParser.json({ limit: '10mb' }))
 app.use('/api/auth', AuthRoutes)
 app.use('/api/users', UsersRoutes)

@@ -37,6 +37,7 @@ export class Student {
 
   @OneToOne(() => User, (user) => user.student, {
     eager: true,
+    cascade: true,
   })
   @JoinColumn()
   user: User

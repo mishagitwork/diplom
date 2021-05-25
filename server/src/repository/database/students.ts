@@ -39,6 +39,7 @@ class StudentsRepository implements IStudentsRepository {
       const response = await DBConnector.connector
         ?.getRepository(Student)
         .save({ ...data, user })
+
       return { value: response }
     } catch (e) {
       return { error: e }

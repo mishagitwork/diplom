@@ -35,14 +35,14 @@
           </nuxt-link>
         </a-menu-item>
         <a-menu-item v-if="studentId" @click="onClose">
-          <nuxt-link :to="`/analitics/student/` + studentId">
+          <nuxt-link :to="`/analytics/student/` + studentId">
             <a-icon type="pie-chart" />
             <span>Аналитика</span>
           </nuxt-link>
         </a-menu-item>
 
         <a-menu-item v-if="isMonitor" @click="onClose">
-          <nuxt-link to="/analitics/group">
+          <nuxt-link to="/analytics/group">
             <a-icon type="pie-chart" />
             <span>О группе</span>
           </nuxt-link>
