@@ -7,7 +7,6 @@ const router: Router = express.Router()
 router.post(
   '/',
   async (req: Request<any, any, IAuthUser, IAuthUser>, res: Response) => {
-    console.log(req.body)
     const { value, error } = await UC.authService.login(req.body)
     if (error) {
       res.status(500).json(error || new Error('UC undefined error'))

@@ -108,7 +108,6 @@ class AttendancesRepository implements IAttendancesRepository {
         .addSelect('COUNT(*) AS count')
         .groupBy('attendance."isAttended"')
         .getRawMany()
-      console.log(response)
       return { value: response }
     } catch (e) {
       return { error: e }

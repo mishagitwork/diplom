@@ -8,15 +8,13 @@
       <a-list
         :item-layout="isMobile ? 'vertical' : 'horizontal'"
         :data-source="universityList"
-        style="padding: 0.5rem 3rem"
+        :style="`padding: 0.5rem ${isMobile ? '1rem' : '3rem'}`"
       >
-        <a-list-item slot="renderItem" slot-scope="item, index">
+        <a-list-item slot="renderItem" slot-scope="item">
           <a slot="actions">редактировать </a>
           <a slot="actions" @click="test"> удалить</a>
           <a-list-item-meta :description="item.fullName">
-            <a slot="title" href="https://www.antdv.com/">{{
-              item.shortName
-            }}</a>
+            <a slot="title">{{ item.shortName }}</a>
             <a-avatar
               slot="avatar"
               src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
@@ -27,7 +25,7 @@
     </div>
     <a-drawer
       title="Создать новый университет"
-      :width="450"
+      :width="isMobile ? '100%' : '40%'"
       :visible="isOpen"
       :body-style="{ paddingBottom: '80px' }"
       @close="isOpen = false"
@@ -114,6 +112,8 @@
 
 <script>
 import delivery from '@/delivery'
+import { mapState } from 'vuex'
+
 export default {
   asyncData() {
     return Promise.all([delivery.UniversityAction.getList()])
@@ -133,11 +133,9 @@ export default {
     }
   },
   computed: {
-    isMobile() {
-      if (process.client) {
-        return window.innerWidth < 700
-      }
-    },
+    ...mapState({
+      isMobile: (state) => state.layout.isMobile,
+    }),
   },
 
   methods: {
@@ -166,9 +164,6 @@ export default {
     async getUniversity() {
       const res = await delivery.UniversityAction.getList()
       this.universityList = res.data
-    },
-    test() {
-      console.log(this.universityList)
     },
   },
 }

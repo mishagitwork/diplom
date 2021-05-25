@@ -32,7 +32,7 @@
       <a-list
         :item-layout="isMobile ? 'vertical' : 'horizontal'"
         :data-source="studentsList"
-        style="padding: 0.5rem 3rem"
+        :style="`padding: 0.5rem ${isMobile ? '1rem' : '3rem'}`"
       >
         <a-list-item slot="renderItem" slot-scope="item">
           <a slot="actions">редактировать </a>
@@ -52,7 +52,7 @@
     </div>
     <a-drawer
       title="Создать нового студента"
-      :width="450"
+      :width="isMobile ? '100%' : '40%'"
       :visible="isOpen"
       :body-style="{ paddingBottom: '80px' }"
       @close="isOpen = false"
@@ -157,6 +157,7 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import delivery from '@/delivery'
 export default {
   asyncData({ store }) {
@@ -199,7 +200,7 @@ export default {
   data() {
     return {
       isOpen: false,
-      form: { fullName: '', facultyId: '', groupId: '', user: {} },
+      form: { facultyId: '', groupId: '', user: {} },
       selectFacultyId: '',
       selectGroupId: '',
       facultyList: [],
@@ -209,11 +210,9 @@ export default {
     }
   },
   computed: {
-    isMobile() {
-      if (process.client) {
-        return window.innerWidth < 700
-      }
-    },
+    ...mapState({
+      isMobile: (state) => state.layout.isMobile,
+    }),
     universityId() {
       return this.$store.state.user.universityId
     },

@@ -14,11 +14,7 @@
         Разрешить доступ к геолокации <a @click="getGeoLocation">Разрешить </a>
       </p>
     </a-modal>
-    <p class="error">{{ error }}</p>
-    <!-- 
-    <p class="decode-result">
-      Last result: <b>{{ result }}</b>
-    </p> -->
+    <p v-if="error" class="error">{{ error }}</p>
 
     <qrcode-stream
       v-if="isAgree"
@@ -47,12 +43,9 @@
 </template>
 
 <script>
-// import { QrcodeStream } from '../../../../src'
 import delivery from '@/delivery'
 import { mapState } from 'vuex'
 export default {
-  //   components: { QrcodeStream },
-
   data() {
     return {
       result: '',
@@ -62,14 +55,13 @@ export default {
       coords: '',
       camera: 'auto',
       isValid: undefined,
+      isPending: false,
     }
   },
   computed: {
     ...mapState({
-      // isAdmin: (state) => state.user.isAdmin,
-      // universityId: (state) => state.user.universityId,
-      // professorId: (state) => state.user.professorId,
       studentId: (state) => state.user.studentId,
+      attendenceClassId: (state) => state.attendance.classId,
     }),
     validationPending() {
       return this.isValid === undefined && this.camera === 'off'
@@ -86,7 +78,6 @@ export default {
 
   methods: {
     agree() {
-      // this.getGeoLocation()
       this.isOpen = false
       this.isAgree = true
     },
@@ -108,21 +99,30 @@ export default {
     async onDecode(result) {
       this.camera = 'off'
       this.result = result
+
+      if (result.startsWith('0000')) {
+        if (this.attendenceClassId) {
+          const res = await delivery.AttendanceAction.updateByStudent({
+            classId: his.attendenceClassId,
+            studentId: result.slice(5),
+            coords: this.coords,
+          })
+          this.isValid = !!res.data
+        } else {
+          this.$router.push(`analytics/student/${result.slice(5)}`)
+        }
+      }
       if (result.startsWith('1111')) {
         const res = await delivery.AttendanceAction.updateByStudent({
           classId: result.slice(5),
           studentId: this.studentId,
           coords: this.coords,
         })
-        this.isValid = !!res
-        console.log(res)
-        // this.isValid = true
+        this.isValid = !!res.data
       } else {
-        this.isValid = false
+        this.isValid = undefined
+        this.camera = 'auto'
       }
-      await setTimeout(() => {}, 5000)
-      console.log(this.result)
-      //this.camera = 'auto'
     },
 
     async onInit(promise) {
@@ -130,17 +130,17 @@ export default {
         await promise
       } catch (error) {
         if (error.name === 'NotAllowedError') {
-          this.error = 'ERROR: you need to grant camera access permisson'
+          this.error = 'Ошибка: вы не дали разрешения для доступа к камере'
         } else if (error.name === 'NotFoundError') {
-          this.error = 'ERROR: no camera on this device'
+          this.error = 'Ошибка: отсутсвует камера'
         } else if (error.name === 'NotSupportedError') {
-          this.error = 'ERROR: secure context required (HTTPS, localhost)'
+          this.error = 'Ошибка: необхлдимо безопасное соединение(HTTPS)'
         } else if (error.name === 'NotReadableError') {
-          this.error = 'ERROR: is the camera already in use?'
+          this.error = 'Ошибка: камера уже используется?'
         } else if (error.name === 'OverconstrainedError') {
-          this.error = 'ERROR: installed cameras are not suitable'
+          this.error = 'Ошибка: установленная камера не подходит'
         } else if (error.name === 'StreamApiNotSupportedError') {
-          this.error = 'ERROR: Stream API is not supported in this browser'
+          this.error = 'Ошибка: Stream API не поддерживается данным браузером'
         }
       }
     },

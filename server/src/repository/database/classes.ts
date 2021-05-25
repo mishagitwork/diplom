@@ -12,7 +12,7 @@ class ClassesRepository implements IClassesRepository {
         relations: ['group', 'professor', 'subject'],
         where: { ...data },
       })
-      console.log(response)
+
       return { value: response }
     } catch (e) {
       return { error: e }
