@@ -34,7 +34,7 @@ export class User {
   @Column({ unique: true })
   login: string
 
-  @Column({ select: false })
+  @Column()
   password: string
 
   @Column()
