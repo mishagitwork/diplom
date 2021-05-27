@@ -1,5 +1,5 @@
-export default function ({ store, redirect }) {
-  if (!store.state.user.userId || !store.state.user.studentId) {
-    return redirect('/singin')
+export default function ({ app, redirect }) {
+  if (!app.$cookies.get('studentId')) {
+    return redirect('/')
   }
 }

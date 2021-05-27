@@ -4,8 +4,6 @@
       <div :class="$style.title">Информация о занятиях</div>
       <a-select
         show-search
-        option-filter-prop="children"
-        :filter-option="filterOption"
         v-model="selectFacultyId"
         style="width: 100px"
         @change="getGroups"
@@ -15,9 +13,6 @@
         </a-select-option>
       </a-select>
       <a-select
-        show-search
-        option-filter-prop="children"
-        :filter-option="filterOption"
         v-model="selectGroupId"
         style="width: 100px"
         @change="getClasses"
@@ -41,10 +36,6 @@
             <span slot="title">
               {{ item.subject.fullName + ' ' }}<b>{{ item.group.shortName }}</b>
             </span>
-            <a-avatar
-              slot="avatar"
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            />
           </a-list-item-meta>
         </a-list-item>
       </a-list>
@@ -166,6 +157,7 @@ export default {
         console.log(e)
       })
   },
+  middleware: 'isAdminAuth',
   data() {
     return {
       isOpen: false,
@@ -191,16 +183,6 @@ export default {
   },
 
   methods: {
-    disabledDate(current) {
-      return current && current > this.$moment().endOf('day')
-    },
-    filterOption(input, option) {
-      return (
-        option.componentOptions.children[0].text
-          .toLowerCase()
-          .indexOf(input.toLowerCase()) >= 0
-      )
-    },
     openStudentDrawer() {
       this.form.facultyId = this.selectFacultyId
       this.form.groupId = this.selectGroupId
@@ -234,12 +216,16 @@ export default {
 </script>
 
 <style module lang="scss">
+@import '/assets/styles/breakpoints.scss';
 .container {
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 3rem;
+    @include tablet {
+      padding: 0 1rem;
+    }
   }
 }
 </style>

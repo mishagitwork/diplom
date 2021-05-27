@@ -20,24 +20,21 @@
       <a-list
         :item-layout="isMobile ? 'vertical' : 'horizontal'"
         :data-source="professorsList"
-        style="padding: 0.5rem 3rem"
+        :style="`padding: 0.5rem ${isMobile ? '1rem' : '3rem'}`"
       >
         <a-list-item slot="renderItem" slot-scope="item">
           <a slot="actions">редактировать </a>
           <a slot="actions"> удалить</a>
           <a-list-item-meta :description="item.position">
             <span slot="title"> {{ item.user.fullName }}</span>
-            <a-avatar
-              slot="avatar"
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            />
+            <a-avatar slot="avatar" :src="item.user.avatar" />
           </a-list-item-meta>
         </a-list-item>
       </a-list>
     </div>
     <a-drawer
       title="Создать новую группу"
-      :width="450"
+      :width="isMobile ? '100%' : '40%'"
       :visible="isOpen"
       :body-style="{ paddingBottom: '80px' }"
       @close="isOpen = false"
@@ -69,6 +66,7 @@
         </a-form-model-item>
         <a-form-model-item ref="facultyId" label="Факультет" prop="facultyId">
           <a-select
+            disabled
             show-search
             placeholder="Выбрать Факультет"
             option-filter-prop="children"
@@ -115,15 +113,16 @@
         }"
       >
         <a-button :style="{ marginRight: '8px' }" @click="resetForm">
-          Cancel
+          Отменить
         </a-button>
-        <a-button type="primary" @click="onSubmit"> Submit </a-button>
+        <a-button type="primary" @click="onSubmit"> Создать </a-button>
       </div>
     </a-drawer>
   </div>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 import delivery from '@/delivery'
 export default {
   asyncData({ store }) {
@@ -152,6 +151,7 @@ export default {
         console.log(e)
       })
   },
+  middleware: 'isAdminAuth',
   data() {
     return {
       isOpen: false,
@@ -163,11 +163,10 @@ export default {
     }
   },
   computed: {
-    isMobile() {
-      if (process.client) {
-        return window.innerWidth < 700
-      }
-    },
+    ...mapState({
+      isMobile: (state) => state.layout.isMobile,
+    }),
+
     universityId() {
       return this.$store.state.user.universityId
     },
@@ -192,7 +191,13 @@ export default {
     onSubmit() {
       this.$refs.ruleForm.validate(async (valid) => {
         if (valid) {
-          await delivery.ProfessorAction.create(this.form)
+          const res = await delivery.ProfessorAction.create(this.form)
+          if (res.data) {
+            await this.getProfessors(this.form.facultyId)
+            this.isOpen = false
+          } else {
+            this.$message.error('Произошла ошибка. Попробуйте еще раз')
+          }
         } else {
           console.log('error submit!!')
           return false
@@ -211,12 +216,16 @@ export default {
 </script>
 
 <style module lang="scss">
+@import '/assets/styles/breakpoints.scss';
 .container {
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 3rem;
+    @include tablet {
+      padding: 0 1rem;
+    }
   }
 }
 </style>

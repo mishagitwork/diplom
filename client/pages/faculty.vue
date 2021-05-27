@@ -15,10 +15,6 @@
           <a slot="actions"> удалить</a>
           <a-list-item-meta :description="item.fullName">
             <span slot="title"> {{ item.shortName }}</span>
-            <a-avatar
-              slot="avatar"
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            />
           </a-list-item-meta>
         </a-list-item>
       </a-list>
@@ -74,9 +70,9 @@
         }"
       >
         <a-button :style="{ marginRight: '8px' }" @click="resetForm">
-          Cancel
+          Отменить
         </a-button>
-        <a-button type="primary" @click="onSubmit"> Submit </a-button>
+        <a-button type="primary" @click="onSubmit"> Создать </a-button>
       </div>
     </a-drawer>
   </div>
@@ -99,6 +95,7 @@ export default {
         console.log(e)
       })
   },
+  middleware: 'isAdminAuth',
   data() {
     return {
       isOpen: false,
@@ -125,7 +122,13 @@ export default {
             shortName: this.form.shortName,
             universityId: this.universityId,
           }
-          await delivery.FacultyAction.create(data)
+          const res = await delivery.FacultyAction.create(data)
+          if (res.data) {
+            await this.getFaculty()
+            this.isOpen = false
+          } else {
+            this.$message.error('Произошла ошибка. Попробуйте еще раз')
+          }
         } else {
           console.log('error submit!!')
           return false
@@ -135,8 +138,10 @@ export default {
     resetForm() {
       this.$refs.ruleForm.resetFields()
     },
-    async getUniversity() {
-      const res = await delivery.UniversityAction.getList()
+    async getFaculty() {
+      const res = await delivery.FacultyAction.getList({
+        universityId: this.universityId,
+      })
       this.facultyList = res.data
     },
   },
@@ -144,12 +149,16 @@ export default {
 </script>
 
 <style module lang="scss">
+@import '/assets/styles/breakpoints.scss';
 .container {
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 3rem;
+    @include tablet {
+      padding: 0 1rem;
+    }
   }
 }
 </style>

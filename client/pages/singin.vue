@@ -19,7 +19,7 @@
 <script>
 import { mapMutations, mapActions } from 'vuex'
 export default {
-  // middleware: 'isAuth',
+  middleware: ['isAuth'],
   data() {
     return {
       data: {
