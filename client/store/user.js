@@ -28,6 +28,8 @@ export const actions = {
     const options = {
       path: '/',
       maxAge: 60 * 6,
+      sameSite: 'lax',
+      secure: true,
     }
     const cookieList = [
       {
