@@ -42,10 +42,7 @@
               {{ item.studentCardId }}
               <span v-if="item.isMonitor">Староста</span>
             </span>
-            <a-avatar
-              slot="avatar"
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            />
+            <a-avatar slot="avatar" :src="item.user.avatar" />
           </a-list-item-meta>
         </a-list-item>
       </a-list>
@@ -103,7 +100,9 @@
               {{ g.fullName }}
             </a-select-option>
           </a-select>
-          <a-checkbox v-model="form.isMonitor">Староста группы</a-checkbox>
+          <a-checkbox :disabled="haveMonitor" v-model="form.isMonitor"
+            >Староста группы</a-checkbox
+          >
         </a-form-model-item>
         <a-form-model-item ref="birthday" label="День рождения" prop="birthday">
           <a-date-picker
@@ -112,6 +111,27 @@
             :disabled-date="disabledDate"
             :show-time="{ defaultValue: $moment('00:00:00', 'HH:mm:ss') }"
           />
+        </a-form-model-item>
+        <a-form-model-item ref="avatar" label="Аватар" prop="avatar">
+          <a-upload
+            :class="$style.upload"
+            list-type="picture-card"
+            :show-upload-list="false"
+            :before-upload="beforeUpload"
+            @change="handleChange"
+            :disabled="form.user.avatar"
+          >
+            <img
+              v-if="form.user.avatar"
+              :src="form.user.avatar"
+              alt="avatar"
+              style="max-width: 15rem"
+            />
+            <div v-else>
+              <a-icon :type="loading ? 'loading' : 'plus'" />
+              <div class="ant-upload-text">Upload</div>
+            </div>
+          </a-upload>
         </a-form-model-item>
         <a-form-model-item ref="login" label="Логин" prop="login">
           <a-input
@@ -148,9 +168,9 @@
         }"
       >
         <a-button :style="{ marginRight: '8px' }" @click="resetForm">
-          Cancel
+          Отменить
         </a-button>
-        <a-button type="primary" @click="onSubmit"> Submit </a-button>
+        <a-button type="primary" @click="onSubmit"> Создать </a-button>
       </div>
     </a-drawer>
   </div>
@@ -159,6 +179,11 @@
 <script>
 import { mapState } from 'vuex'
 import delivery from '@/delivery'
+function getBase64(img, callback) {
+  const reader = new FileReader()
+  reader.addEventListener('load', () => callback(reader.result))
+  reader.readAsDataURL(img)
+}
 export default {
   asyncData({ store }) {
     return Promise.all([
@@ -197,9 +222,11 @@ export default {
         console.log(e)
       })
   },
+  middleware: 'isAdminAuth',
   data() {
     return {
       isOpen: false,
+      loading: false,
       form: { facultyId: '', groupId: '', user: {} },
       selectFacultyId: '',
       selectGroupId: '',
@@ -213,8 +240,10 @@ export default {
     ...mapState({
       isMobile: (state) => state.layout.isMobile,
     }),
-    universityId() {
-      return this.$store.state.user.universityId
+    haveMonitor() {
+      return this.studentsList.some((item) => {
+        return item.isMonitor
+      })
     },
   },
 
@@ -229,6 +258,36 @@ export default {
           .indexOf(input.toLowerCase()) >= 0
       )
     },
+    handleChange(info) {
+      this.form.user.avatar = false
+      if (info.file.status === 'uploading') {
+        this.loading = true
+        return
+      }
+
+      if (info.file.status === 'done') {
+        getBase64(info.file.originFileObj, (imageUrl) => {
+          console.log((this.form.user.avatar = imageUrl))
+          this.form.user.avatar = imageUrl
+          this.loading = false
+        })
+      }
+    },
+    beforeUpload(file) {
+      const isJpgOrPng = file.type === 'image/jpeg' || file.type === 'image/png'
+      if (!isJpgOrPng) {
+        this.$message.error('You can only upload JPG file!')
+      }
+      const isLt2M = file.size / 1024 / 1024 < 2
+      if (!isLt2M) {
+        this.$message.error('Image must smaller than 2MB!')
+      }
+      if (this.form.user.avatar) {
+        this.form.user.avatar = null
+      }
+      return isJpgOrPng && isLt2M
+    },
+
     openStudentDrawer() {
       this.form.facultyId = this.selectFacultyId
       this.form.groupId = this.selectGroupId
@@ -237,7 +296,13 @@ export default {
     onSubmit() {
       this.$refs.ruleForm.validate(async (valid) => {
         if (valid) {
-          await delivery.StudentAction.create(this.form)
+          const res = await delivery.StudentAction.create(this.form)
+          if (res.data) {
+            await this.getStudents(this.selectGroupId)
+            this.isOpen = false
+          } else {
+            this.$message.error('Произошла ошибка. Попробуйте еще раз')
+          }
         } else {
           console.log('error submit!!')
           return false
@@ -262,12 +327,20 @@ export default {
 </script>
 
 <style module lang="scss">
+@import '/assets/styles/breakpoints.scss';
 .container {
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 3rem;
+    @include tablet {
+      padding: 0 1rem;
+    }
+  }
+  .upload {
+    max-width: 10rem;
+    max-height: 10rem;
   }
 }
 </style>

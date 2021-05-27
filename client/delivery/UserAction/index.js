@@ -9,6 +9,14 @@ class UserActions {
       return new Error('Network error, try again late')
     }
   }
+  delete = async (data) => {
+    try {
+      return await ApiConnector.connector.delete('/users/' + data.userId)
+    } catch (e) {
+      console.error(e)
+      return new Error('Network error, try again late')
+    }
+  }
 }
 
 export default new UserActions()

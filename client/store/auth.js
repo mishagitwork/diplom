@@ -31,6 +31,7 @@ export const actions = {
   logout({ commit }) {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('refreshToken')
+    this.$cookies.removeAll()
     commit('user/init', { userId: null }, { root: true })
     commit('setTokens', { accessToken: null, refreshToken: null })
     this.$router.push('/singin')
@@ -58,6 +59,10 @@ export const actions = {
   refreshTokenTimeout({ dispatch, commit }, data) {
     localStorage.setItem('accessToken', data.accessToken)
     localStorage.setItem('refreshToken', data.refreshToken)
+
+    dispatch('user/setCookies', delivery.AuthAction.decodeToken(), {
+      root: true,
+    })
     commit('user/init', delivery.AuthAction.decodeToken(), { root: true })
     delivery.AuthAction.refreshTokenTimeout(data)
     var timeout = data.expiresIn - parseInt(new Date().getTime() / 1000) - 300

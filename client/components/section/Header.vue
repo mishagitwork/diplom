@@ -3,7 +3,6 @@
     <div v-if="!isSingInPage" :class="$style.header">
       <a-icon type="menu" @click="showDrawer" />
 
-      <div class="logo">Logo</div>
       <a-icon type="logout" @click="logout" />
     </div>
     <a-drawer
@@ -30,7 +29,7 @@
         </a-menu-item>
         <a-menu-item v-if="studentId" @click="onClose">
           <nuxt-link to="/personal">
-            <a-icon type="pie-chart" />
+            <a-icon type="qrcode" />
             <span>Личный QR</span>
           </nuxt-link>
         </a-menu-item>
@@ -43,7 +42,7 @@
 
         <a-menu-item v-if="isMonitor" @click="onClose">
           <nuxt-link to="/analytics/group">
-            <a-icon type="pie-chart" />
+            <a-icon type="bar-chart" />
             <span>О группе</span>
           </nuxt-link>
         </a-menu-item>
@@ -83,18 +82,18 @@ export default {
       placement: 'left',
       menu: [
         { icon: 'desktop', text: 'Главная', route: '/' },
-        { icon: 'pie-chart', text: 'Считать QR', route: '/scaner' },
+        { icon: 'scan', text: 'Считать QR', route: '/scaner' },
       ],
       adminMenu: [
         { icon: 'bank', text: 'Факультеты', route: '/faculty' },
-        { icon: 'bank', text: 'Группы', route: '/groups' },
-        { icon: 'bank', text: 'Студенты', route: '/students' },
-        { icon: 'bank', text: 'Преподаватели', route: '/professors' },
-        { icon: 'bank', text: 'Предметы', route: '/subjects' },
-        { icon: 'bank', text: 'Занятия', route: '/class' },
+        { icon: 'team', text: 'Группы', route: '/groups' },
+        { icon: 'smile', text: 'Студенты', route: '/students' },
+        { icon: 'solution', text: 'Преподаватели', route: '/professors' },
+        { icon: 'read', text: 'Предметы', route: '/subjects' },
+        { icon: 'file-add', text: 'Занятия', route: '/class' },
       ],
       professorMenu: [
-        { icon: 'bank', text: 'Занятия', route: '/professors/class' },
+        { icon: 'file-add', text: 'Занятия', route: '/professors/class' },
       ],
     }
   },

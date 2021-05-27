@@ -12,13 +12,9 @@
       >
         <a-list-item slot="renderItem" slot-scope="item">
           <a slot="actions">редактировать </a>
-          <a slot="actions" @click="test"> удалить</a>
+          <a slot="actions" @click="deleteUser(item.userId)"> удалить</a>
           <a-list-item-meta :description="item.fullName">
             <a slot="title">{{ item.shortName }}</a>
-            <a-avatar
-              slot="avatar"
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            />
           </a-list-item-meta>
         </a-list-item>
       </a-list>
@@ -78,7 +74,7 @@
           label="Пароль администратора"
           prop="password"
         >
-          <a-input
+          <a-input-password
             v-model="form.password"
             @blur="
               () => {
@@ -102,9 +98,9 @@
         }"
       >
         <a-button :style="{ marginRight: '8px' }" @click="resetForm">
-          Cancel
+          Отменить
         </a-button>
-        <a-button type="primary" @click="onSubmit"> Submit </a-button>
+        <a-button type="primary" @click="onSubmit"> Создать </a-button>
       </div>
     </a-drawer>
   </div>
@@ -151,7 +147,13 @@ export default {
               password: this.form.password,
             },
           }
-          await delivery.UniversityAction.create(data)
+          const res = await delivery.UniversityAction.create(data)
+          if (res.data) {
+            await this.getUniversity()
+            this.isOpen = false
+          } else {
+            this.$message.error('Произошла ошибка. Попробуйте еще раз')
+          }
         } else {
           console.log('error submit!!')
           return false
@@ -165,17 +167,25 @@ export default {
       const res = await delivery.UniversityAction.getList()
       this.universityList = res.data
     },
+    async deleteUser(userId) {
+      await delivery.UserActions.delete({ userId })
+      await this.getUniversity()
+    },
   },
 }
 </script>
 
 <style module lang="scss">
+@import '/assets/styles/breakpoints.scss';
 .container {
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 3rem;
+    @include tablet {
+      padding: 0 1rem;
+    }
   }
 }
 </style>

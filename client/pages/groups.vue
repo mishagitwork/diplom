@@ -14,7 +14,7 @@
           {{ f.shortName }}
         </a-select-option>
       </a-select>
-      <a-button type="primary" @click="isOpen = true"> Создать </a-button>
+      <a-button type="primary" @click="openDrawer"> Создать </a-button>
     </div>
     <div class="list">
       <a-list
@@ -27,10 +27,6 @@
           <a slot="actions"> удалить</a>
           <a-list-item-meta :description="item.fullName">
             <span slot="title"> {{ item.shortName }}</span>
-            <a-avatar
-              slot="avatar"
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            />
           </a-list-item-meta>
         </a-list-item>
       </a-list>
@@ -73,12 +69,12 @@
         </a-form-model-item>
         <a-form-model-item ref="facultyId" label="Факультет" prop="facultyId">
           <a-select
+            disabled
             show-search
             placeholder="Выбрать Факультет"
             option-filter-prop="children"
             :filter-option="filterOption"
             v-model="form.facultyId"
-            @change="test"
           >
             <a-select-option v-for="f in facultyList" :key="f.id" :value="f.id">
               {{ f.fullName }}
@@ -150,6 +146,7 @@ export default {
         console.log(e)
       })
   },
+  middleware: 'isAdminAuth',
   data() {
     return {
       isOpen: false,
@@ -180,9 +177,11 @@ export default {
           .indexOf(input.toLowerCase()) >= 0
       )
     },
-    test() {
-      console.log(this.form.facultyId)
+    openDrawer() {
+      this.form.facultyId = this.selectFacultyId
+      this.isOpen = true
     },
+
     onSubmit() {
       this.$refs.ruleForm.validate(async (valid) => {
         if (valid) {
@@ -191,7 +190,13 @@ export default {
             shortName: this.form.shortName,
             facultyId: this.facultyId,
           }
-          await delivery.GroupAction.create(this.form)
+          const res = await delivery.GroupAction.create(this.form)
+          if (res.data) {
+            await this.getGroups(this.selectFacultyId)
+            this.isOpen = false
+          } else {
+            this.$message.error('Произошла ошибка. Попробуйте еще раз')
+          }
         } else {
           console.log('error submit!!')
           return false
@@ -205,21 +210,21 @@ export default {
       const res = await delivery.GroupAction.getList({ facultyId: value })
       this.groupsList = res.data
     },
-    async getUniversity() {
-      const res = await delivery.UniversityAction.getList()
-      this.facultyList = res.data
-    },
   },
 }
 </script>
 
 <style module lang="scss">
+@import '/assets/styles/breakpoints.scss';
 .container {
   .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     padding: 0 3rem;
+    @include tablet {
+      padding: 0 1rem;
+    }
   }
 }
 </style>
