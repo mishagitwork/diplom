@@ -23,7 +23,7 @@
           </a-card>
         </template></a-col
       >
-      <a-col :span="12" style="width: 350px">
+      <a-col :span="12" style="width: 350px" v-if="analytic[0]">
         <a-statistic title="Количество пропусков" :value="analytic[0].count">
           <template #suffix>
             <span>
