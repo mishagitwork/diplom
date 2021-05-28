@@ -8,6 +8,7 @@ export const state = () => ({
   professorId: null,
   studentId: null,
   groupId: null,
+  isMonitor: false,
 })
 
 export const mutations = {
