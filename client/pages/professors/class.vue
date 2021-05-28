@@ -10,16 +10,16 @@
         :style="`padding: 0.5rem ${isMobile ? '1rem' : '3rem'}`"
       >
         <a-list-item slot="renderItem" slot-scope="item">
-          <a slot="actions" @click="$router.push(`/analitics/class/${item.id}`)"
+          <a slot="actions" @click="$router.push(`/analytics/class/${item.id}`)"
             >Список занятий
           </a>
           <a slot="actions">
             <a-popover v-model="item.start" trigger="click">
               <a slot="content" @click="startClassAll(item)">Для всех</a>
               <div slot="content" class="empty"></div>
-              <a slot="content" @click="openStartClassDrawer(item)"
-                >Для некоторых</a
-              >
+              <a slot="content" @click="openStartClassDrawer(item)">
+                Для некоторых
+              </a>
               Начать
             </a-popover></a
           >

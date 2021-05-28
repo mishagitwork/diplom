@@ -54,13 +54,15 @@
               <span slot="description">
                 Местоположение:
                 <a
+                  v-if="item.coords"
                   :href="`http://maps.google.com/maps?q=${converGeoPlace(
                     item.coords
                   )}`"
                   target="_blank"
                 >
-                  {{ item.coords ? converGeoPlace(item.coords) : 'Не указано' }}
+                  {{ converGeoPlace(item.coords) }}
                 </a>
+                <span v-else>Не указано</span>
               </span>
               <span slot="title">
                 {{ item.student.user.fullName }}
@@ -73,10 +75,7 @@
                   {{ item.isAttended ? 'Присутсвовал' : 'Пропустил' }}
                 </span>
               </span>
-              <a-avatar
-                slot="avatar"
-                src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-              />
+              <a-avatar slot="avatar" :src="item.student.user.avatar" />
             </a-list-item-meta>
           </a-list-item>
         </a-list>

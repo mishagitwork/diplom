@@ -24,14 +24,19 @@
     >
       <div v-if="validationSuccess" :class="$style.validationSuccess">
         Операция прошла успешно
+        <a-button type="default" @click="$router.push('/')">
+          На главную
+        </a-button>
       </div>
 
       <div v-if="validationFailure" :class="$style.validationFailure">
         Произошла ошибка
         <div class="buttons">
-          <a-button type="default">На главную</a-button>
+          <a-button type="default" @click="$router.push('/')">
+            На главную
+          </a-button>
           <span> </span>
-          <a-button type="primary">Повторить</a-button>
+          <a-button type="primary" @click="retry">Повторить</a-button>
         </div>
       </div>
 
@@ -95,19 +100,21 @@ export default {
         }
       )
     },
-
+    retry() {
+      this.isValid = undefined
+      this.camera = 'auto'
+    },
     async onDecode(result) {
       this.camera = 'off'
       this.result = result
-
       if (result.startsWith('0000')) {
         if (this.attendenceClassId) {
           const res = await delivery.AttendanceAction.updateByStudent({
-            classId: his.attendenceClassId,
+            classId: this.attendenceClassId,
             studentId: result.slice(5),
             coords: this.coords,
           })
-          this.isValid = !!res.data
+          this.isValid = !!res.data ? res.data.isAttended : false
         } else {
           this.$router.push(`analytics/student/${result.slice(5)}`)
         }
@@ -118,8 +125,9 @@ export default {
           studentId: this.studentId,
           coords: this.coords,
         })
-        this.isValid = !!res.data
-      } else {
+        this.isValid = !!res.data ? res.data.isAttended : false
+      }
+      if (result.startsWith('0000') && result.startsWith('1111')) {
         this.isValid = undefined
         this.camera = 'auto'
       }
