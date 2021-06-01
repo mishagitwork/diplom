@@ -24,7 +24,7 @@
       >
         <a-list-item slot="renderItem" slot-scope="item">
           <a slot="actions">редактировать </a>
-          <a slot="actions"> удалить</a>
+          <a slot="actions" @click="deleteGroup(item.id)"> удалить</a>
           <a-list-item-meta :description="item.fullName">
             <span slot="title"> {{ item.shortName }}</span>
           </a-list-item-meta>
@@ -108,9 +108,9 @@
         }"
       >
         <a-button :style="{ marginRight: '8px' }" @click="resetForm">
-          Cancel
+          ОТменить
         </a-button>
-        <a-button type="primary" @click="onSubmit"> Submit </a-button>
+        <a-button type="primary" @click="onSubmit"> Создать </a-button>
       </div>
     </a-drawer>
   </div>
@@ -194,6 +194,7 @@ export default {
           if (res.data) {
             await this.getGroups(this.selectFacultyId)
             this.isOpen = false
+            this.resetForm()
           } else {
             this.$message.error('Произошла ошибка. Попробуйте еще раз')
           }
@@ -209,6 +210,10 @@ export default {
     async getGroups(value) {
       const res = await delivery.GroupAction.getList({ facultyId: value })
       this.groupsList = res.data
+    },
+    async deleteGroup(groupId) {
+      await delivery.GroupAction.delete({ groupId })
+      await this.getGroups(this.selectFacultyId)
     },
   },
 }

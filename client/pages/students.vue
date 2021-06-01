@@ -36,7 +36,7 @@
       >
         <a-list-item slot="renderItem" slot-scope="item">
           <a slot="actions">редактировать </a>
-          <a slot="actions"> удалить</a>
+          <a slot="actions" @click="deleteUser(item.user.id)"> удалить</a>
           <a-list-item-meta :description="item.user.fullName">
             <span slot="title">
               {{ item.studentCardId }}
@@ -119,7 +119,7 @@
             :show-upload-list="false"
             :before-upload="beforeUpload"
             @change="handleChange"
-            :disabled="form.user.avatar"
+            :disabled="!!form.user.avatar"
           >
             <img
               v-if="form.user.avatar"
@@ -267,7 +267,6 @@ export default {
 
       if (info.file.status === 'done') {
         getBase64(info.file.originFileObj, (imageUrl) => {
-          console.log((this.form.user.avatar = imageUrl))
           this.form.user.avatar = imageUrl
           this.loading = false
         })
@@ -300,6 +299,7 @@ export default {
           if (res.data) {
             await this.getStudents(this.selectGroupId)
             this.isOpen = false
+            this.resetForm()
           } else {
             this.$message.error('Произошла ошибка. Попробуйте еще раз')
           }
@@ -321,6 +321,10 @@ export default {
     async getStudents(value) {
       const res = await delivery.StudentAction.getList({ groupId: value })
       this.studentsList = res.data
+    },
+    async deleteUser(userId) {
+      await delivery.UserActions.delete({ userId })
+      await this.getStudents(this.selectGroupId)
     },
   },
 }

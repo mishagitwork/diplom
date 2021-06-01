@@ -17,6 +17,14 @@ class FacultyAction {
       return new Error('Network error, try again late')
     }
   }
+  delete = async (data) => {
+    try {
+      return await ApiConnector.connector.delete('/faculty/' + data.facultyId)
+    } catch (e) {
+      console.error(e)
+      return new Error('Network error, try again late')
+    }
+  }
 }
 
 export default new FacultyAction()

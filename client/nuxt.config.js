@@ -5,7 +5,7 @@ export default {
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    title: 'PWA',
+    title: 'Контроль учета',
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -15,8 +15,35 @@ export default {
         content: '',
       },
     ],
-    link: [{ rel: 'icon', type: 'image/x-icon', href: '/favicon.ico' }],
+    link: [
+      {
+        rel: 'apple-touch-icon',
+        sizes: '180x180',
+        href: '/favicons/apple-touch-icon.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '32x32',
+        href: '/favicons/favicon-32x32.png',
+      },
+      {
+        rel: 'icon',
+        type: 'image/png',
+        sizes: '16x16',
+        href: '/favicons/favicon-16x16.png',
+      },
+      { rel: 'manifest', href: '/favicons/site.webmanifest' },
+      {
+        rel: 'mask-icon',
+        href: '/favicons/safari-pinned-tab.svg',
+        color: '#5bbad5',
+      },
+      { rel: 'msapplication-TileColor', content: '#da532c' },
+      { rel: 'theme-color', content: '#ffffff' },
+    ],
   },
+
   router: {
     middleware: 'isNotAuth',
   },
@@ -27,7 +54,6 @@ export default {
     '@/plugins/antd-ui',
     { src: '@/plugins/vue-qrcode-reader', mode: 'client' },
     { src: '@/plugins/vue-qrcode', mode: 'client' },
-    // { src: '~plugins/vue-chartjs.js', ssr: false },
   ],
 
   // Auto import components: https://go.nuxtjs.dev/config-components

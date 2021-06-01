@@ -12,7 +12,7 @@
       >
         <a-list-item slot="renderItem" slot-scope="item">
           <a slot="actions">редактировать </a>
-          <a slot="actions"> удалить</a>
+          <a slot="actions" @click="deleteSubject(item.id)"> удалить</a>
           <a-list-item-meta :description="item.fullName">
             <span slot="title"> {{ item.shortName }}</span>
           </a-list-item-meta>
@@ -20,7 +20,7 @@
       </a-list>
     </div>
     <a-drawer
-      title="Создать новый факультет"
+      title="Создать новый предмет"
       :width="isMobile ? '100%' : '40%'"
       :visible="isOpen"
       :body-style="{ paddingBottom: '80px' }"
@@ -127,6 +127,7 @@ export default {
           if (res.data) {
             await this.getSubjects()
             this.isOpen = false
+            this.resetForm()
           } else {
             this.$message.error('Произошла ошибка. Попробуйте еще раз')
           }
@@ -144,6 +145,10 @@ export default {
         universityId: this.universityId,
       })
       this.subjectsList = res.data
+    },
+    async deleteSubject(subjectId) {
+      await delivery.SubjectAction.delete({ subjectId })
+      await this.getSubjects()
     },
   },
 }

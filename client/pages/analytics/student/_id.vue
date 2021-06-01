@@ -6,12 +6,11 @@
     <a-row :gutter="[16, 16]" type="flex" justify="space-around">
       <a-col :span="12" style="width: 300px">
         <template>
-          <a-card :style="{ width: isMobile ? '100%' : '300px' }">
-            <img
-              slot="cover"
-              alt="example"
-              src="https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png"
-            />
+          <a-card
+            :style="{ width: isMobile ? '100%' : '300px' }"
+            :bordered="false"
+          >
+            <img slot="cover" :src="student.user.avatar" />
             <a-card-meta v-if="!!student" :title="student.user.fullName">
               <span slot="description">
                 Номер студенческого билета: {{ student.studentCardId }}<br />
