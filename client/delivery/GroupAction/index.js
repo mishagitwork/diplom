@@ -17,6 +17,14 @@ class GroupAction {
       return new Error('Network error, try again late')
     }
   }
+  delete = async (data) => {
+    try {
+      return await ApiConnector.connector.delete('/groups/' + data.groupId)
+    } catch (e) {
+      console.error(e)
+      return new Error('Network error, try again late')
+    }
+  }
 }
 
 export default new GroupAction()

@@ -10,9 +10,13 @@
         Для продолжения необходимо дать приложению разрешение на доступ к камере
         и геолокации.
       </p>
-      <p>
-        Разрешить доступ к геолокации <a @click="getGeoLocation">Разрешить </a>
-      </p>
+
+      <a-spin :spinning="spinning" :class="$style.spinning" tip="Loading...">
+        <p>
+          Разрешить доступ к геолокации
+          <a @click="getGeoLocation">Разрешить </a>
+        </p>
+      </a-spin>
     </a-modal>
     <p v-if="error" class="error">{{ error }}</p>
 
@@ -61,6 +65,7 @@ export default {
       camera: 'auto',
       isValid: undefined,
       isPending: false,
+      spinning: false,
     }
   },
   computed: {
@@ -87,15 +92,19 @@ export default {
       this.isAgree = true
     },
     getGeoLocation() {
+      this.spinning = true
       navigator.geolocation.getCurrentPosition(
         (position) => {
           this.coords = {
             latitude: position.coords.latitude,
             longitude: position.coords.longitude,
           }
+          this.spinning = false
         },
         (error) => {
           this.coords = false
+          this.spinning = false
+          this.$message.error(error.message)
           console.log(error.message)
         }
       )
@@ -162,6 +171,14 @@ export default {
   color: red;
 }
 .container {
+  .spinning {
+    position: absolute;
+    top: 50%;
+
+    width: 100vw;
+    height: 100vh;
+    z-index: 5000;
+  }
   .validationSuccess,
   .validationFailure,
   .validationPending {

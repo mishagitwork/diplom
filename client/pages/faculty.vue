@@ -12,7 +12,7 @@
       >
         <a-list-item slot="renderItem" slot-scope="item">
           <a slot="actions">редактировать </a>
-          <a slot="actions"> удалить</a>
+          <a slot="actions" @click="deleteFaculty(item.id)"> удалить</a>
           <a-list-item-meta :description="item.fullName">
             <span slot="title"> {{ item.shortName }}</span>
           </a-list-item-meta>
@@ -126,6 +126,7 @@ export default {
           if (res.data) {
             await this.getFaculty()
             this.isOpen = false
+            this.resetForm()
           } else {
             this.$message.error('Произошла ошибка. Попробуйте еще раз')
           }
@@ -143,6 +144,10 @@ export default {
         universityId: this.universityId,
       })
       this.facultyList = res.data
+    },
+    async deleteFaculty(facultyId) {
+      await delivery.FacultyAction.delete({ facultyId })
+      await this.getFaculty()
     },
   },
 }

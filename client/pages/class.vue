@@ -31,7 +31,7 @@
       >
         <a-list-item slot="renderItem" slot-scope="item">
           <a slot="actions">редактировать </a>
-          <a slot="actions"> удалить</a>
+          <a slot="actions" @click="deleteClass(item.id)"> удалить</a>
           <a-list-item-meta :description="item.professor.user.fullName">
             <span slot="title">
               {{ item.subject.fullName + ' ' }}<b>{{ item.group.shortName }}</b>
@@ -41,7 +41,7 @@
       </a-list>
     </div>
     <a-drawer
-      title="Создать нового студента"
+      title="Создать новое занятие"
       :width="isMobile ? '100%' : '40%'"
       :visible="isOpen"
       :body-style="{ paddingBottom: '80px' }"
@@ -100,9 +100,9 @@
         }"
       >
         <a-button :style="{ marginRight: '8px' }" @click="resetForm">
-          Cancel
+          Отменить
         </a-button>
-        <a-button type="primary" @click="onSubmit"> Submit </a-button>
+        <a-button type="primary" @click="onSubmit"> Создать </a-button>
       </div>
     </a-drawer>
   </div>
@@ -191,7 +191,14 @@ export default {
     onSubmit() {
       this.$refs.ruleForm.validate(async (valid) => {
         if (valid) {
-          await delivery.ClassAction.create(this.form)
+          const res = await delivery.ClassAction.create(this.form)
+          if (res.data) {
+            await this.getClasses(this.selectGroupId)
+            this.isOpen = false
+            this.resetForm()
+          } else {
+            this.$message.error('Произошла ошибка. Попробуйте еще раз')
+          }
         } else {
           console.log('error submit!!')
           return false
@@ -210,6 +217,10 @@ export default {
     async getClasses(value) {
       const res = await delivery.ClassAction.getList({ groupId: value })
       this.classesList = res.data
+    },
+    async deleteClass(classId) {
+      await delivery.ClassAction.delete({ classId })
+      await this.getClasses(this.selectGroupId)
     },
   },
 }

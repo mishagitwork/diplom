@@ -53,14 +53,14 @@
         }"
       >
         <a-button :style="{ marginRight: '8px' }" @click="resetForm">
-          Cancel
+          Отменить
         </a-button>
         <a-button
           :disabled="!studentsList.length"
           type="primary"
           @click="startClass"
         >
-          Submit
+          Создать
         </a-button>
       </div>
     </a-drawer>
