@@ -28,9 +28,7 @@ export class Subject {
   @Column()
   universityId: string
 
-  @ManyToOne(() => University, (university) => university.subjects, {
-    eager: true,
-  })
+  @ManyToOne(() => University, (university) => university.subjects)
   university: University
 
   @OneToMany(() => Class, (classs) => classs.subject, { cascade: true })
