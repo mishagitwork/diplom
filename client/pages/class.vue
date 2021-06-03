@@ -30,7 +30,7 @@
         :style="`padding: 0.5rem ${isMobile ? '1rem' : '3rem'}`"
       >
         <a-list-item slot="renderItem" slot-scope="item">
-          <a slot="actions">редактировать </a>
+          <a slot="actions" @click="updateDrawer(item)">редактировать </a>
           <a slot="actions" @click="deleteClass(item.id)"> удалить</a>
           <a-list-item-meta :description="item.professor.user.fullName">
             <span slot="title">
@@ -41,7 +41,7 @@
       </a-list>
     </div>
     <a-drawer
-      title="Создать новое занятие"
+      :title="this.form.id ? 'Редактировать занятие' : 'Создать новое занятие'"
       :width="isMobile ? '100%' : '40%'"
       :visible="isOpen"
       :body-style="{ paddingBottom: '80px' }"
@@ -102,7 +102,12 @@
         <a-button :style="{ marginRight: '8px' }" @click="resetForm">
           Отменить
         </a-button>
-        <a-button type="primary" @click="onSubmit"> Создать </a-button>
+        <a-button v-if="!this.form.id" type="primary" @click="onSubmit">
+          Создать
+        </a-button>
+        <a-button v-else type="primary" @click="updateClass">
+          Редактировать
+        </a-button>
       </div>
     </a-drawer>
   </div>
@@ -221,6 +226,18 @@ export default {
     async deleteClass(classId) {
       await delivery.ClassAction.delete({ classId })
       await this.getClasses(this.selectGroupId)
+    },
+    updateDrawer(item) {
+      this.form = { ...item }
+      this.isOpen = true
+    },
+    async updateClass() {
+      const res = await delivery.ClassAction.update(this.form)
+      if (res.data) {
+        await this.getClasses(this.selectGroupId)
+        this.form = {}
+        this.isOpen = false
+      }
     },
   },
 }

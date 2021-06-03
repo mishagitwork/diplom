@@ -11,7 +11,7 @@
         :style="`padding: 0.5rem ${isMobile ? '1rem' : '3rem'}`"
       >
         <a-list-item slot="renderItem" slot-scope="item">
-          <a slot="actions">редактировать </a>
+          <a slot="actions" @click="updateDrawer(item)">редактировать </a>
           <a slot="actions" @click="deleteFaculty(item.id)"> удалить</a>
           <a-list-item-meta :description="item.fullName">
             <span slot="title"> {{ item.shortName }}</span>
@@ -20,7 +20,9 @@
       </a-list>
     </div>
     <a-drawer
-      title="Создать новый факультет"
+      :title="
+        this.form.id ? 'Редактировать факультет' : 'Создать новый факультет'
+      "
       :width="isMobile ? '100%' : '40%'"
       :visible="isOpen"
       :body-style="{ paddingBottom: '80px' }"
@@ -72,7 +74,12 @@
         <a-button :style="{ marginRight: '8px' }" @click="resetForm">
           Отменить
         </a-button>
-        <a-button type="primary" @click="onSubmit"> Создать </a-button>
+        <a-button v-if="!this.form.id" type="primary" @click="onSubmit">
+          Создать
+        </a-button>
+        <a-button v-else type="primary" @click="updateFaculty">
+          Редактировать
+        </a-button>
       </div>
     </a-drawer>
   </div>
@@ -148,6 +155,18 @@ export default {
     async deleteFaculty(facultyId) {
       await delivery.FacultyAction.delete({ facultyId })
       await this.getFaculty()
+    },
+    updateDrawer(item) {
+      this.form = { ...item }
+      this.isOpen = true
+    },
+    async updateFaculty() {
+      const res = await delivery.FacultyAction.update(this.form)
+      if (res.data) {
+        await this.getFaculty()
+        this.form = {}
+        this.isOpen = false
+      }
     },
   },
 }

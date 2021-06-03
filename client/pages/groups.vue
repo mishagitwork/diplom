@@ -23,7 +23,7 @@
         :style="`padding: 0.5rem ${isMobile ? '1rem' : '3rem'}`"
       >
         <a-list-item slot="renderItem" slot-scope="item">
-          <a slot="actions">редактировать </a>
+          <a slot="actions" @click="updateDrawer(item)">редактировать </a>
           <a slot="actions" @click="deleteGroup(item.id)"> удалить</a>
           <a-list-item-meta :description="item.fullName">
             <span slot="title"> {{ item.shortName }}</span>
@@ -32,7 +32,7 @@
       </a-list>
     </div>
     <a-drawer
-      title="Создать новую группу"
+      :title="this.form.id ? 'Редактировать группу' : 'Создать новую группу'"
       :width="isMobile ? '100%' : '40%'"
       :visible="isOpen"
       :body-style="{ paddingBottom: '80px' }"
@@ -69,7 +69,7 @@
         </a-form-model-item>
         <a-form-model-item ref="facultyId" label="Факультет" prop="facultyId">
           <a-select
-            disabled
+            :disabled="!this.form.id"
             show-search
             placeholder="Выбрать Факультет"
             option-filter-prop="children"
@@ -108,9 +108,14 @@
         }"
       >
         <a-button :style="{ marginRight: '8px' }" @click="resetForm">
-          ОТменить
+          Отменить
         </a-button>
-        <a-button type="primary" @click="onSubmit"> Создать </a-button>
+        <a-button v-if="!this.form.id" type="primary" @click="onSubmit">
+          Создать
+        </a-button>
+        <a-button v-else type="primary" @click="updateGroup">
+          Редактировать
+        </a-button>
       </div>
     </a-drawer>
   </div>
@@ -214,6 +219,18 @@ export default {
     async deleteGroup(groupId) {
       await delivery.GroupAction.delete({ groupId })
       await this.getGroups(this.selectFacultyId)
+    },
+    updateDrawer(item) {
+      this.form = { ...item }
+      this.isOpen = true
+    },
+    async updateGroup() {
+      const res = await delivery.GroupAction.update(this.form)
+      if (res.data) {
+        await this.getGroups(this.selectFacultyId)
+        this.form = {}
+        this.isOpen = false
+      }
     },
   },
 }

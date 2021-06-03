@@ -25,6 +25,19 @@ class ClassAction {
       return new Error('Network error, try again late')
     }
   }
+  update = async (data) => {
+    try {
+      return await ApiConnector.connector.put('/classes/' + data.id, {
+        id: data.id,
+        groupId: data.groupId,
+        subjectId: data.subjectId,
+        professorId: data.professorId,
+      })
+    } catch (e) {
+      console.error(e)
+      return new Error('Network error, try again late')
+    }
+  }
   delete = async (data) => {
     try {
       return await ApiConnector.connector.delete('/classes/' + data.classId)

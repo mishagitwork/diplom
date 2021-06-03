@@ -17,6 +17,15 @@ class GroupAction {
       return new Error('Network error, try again late')
     }
   }
+  update = async (data) => {
+    try {
+      delete data.faculty
+      return await ApiConnector.connector.put('/groups/' + data.id, data)
+    } catch (e) {
+      console.error(e)
+      return new Error('Network error, try again late')
+    }
+  }
   delete = async (data) => {
     try {
       return await ApiConnector.connector.delete('/groups/' + data.groupId)
