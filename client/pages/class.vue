@@ -30,8 +30,15 @@
         :style="`padding: 0.5rem ${isMobile ? '1rem' : '3rem'}`"
       >
         <a-list-item slot="renderItem" slot-scope="item">
+          <a
+            slot="actions"
+            @click="$router.push(`/analytics/class/${item.id}`)"
+          >
+            список
+          </a>
           <a slot="actions" @click="updateDrawer(item)">редактировать </a>
           <a slot="actions" @click="deleteClass(item.id)"> удалить</a>
+
           <a-list-item-meta :description="item.professor.user.fullName">
             <span slot="title">
               {{ item.subject.fullName + ' ' }}<b>{{ item.group.shortName }}</b>

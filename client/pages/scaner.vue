@@ -129,12 +129,16 @@ export default {
         }
       }
       if (result.startsWith('1111')) {
-        const res = await delivery.AttendanceAction.updateByStudent({
-          classId: result.slice(5),
-          studentId: this.studentId,
-          coords: this.coords,
-        })
-        this.isValid = !!res.data ? res.data.isAttended : false
+        if (this.studentId) {
+          const res = await delivery.AttendanceAction.updateByStudent({
+            classId: result.slice(5),
+            studentId: this.studentId,
+            coords: this.coords,
+          })
+          this.isValid = !!res.data ? res.data.isAttended : false
+        } else {
+          this.$router.push(`analytics/class/${result.slice(5)}`)
+        }
       }
       if (result.startsWith('0000') && result.startsWith('1111')) {
         this.isValid = undefined

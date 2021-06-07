@@ -39,6 +39,12 @@
             <span>Аналитика</span>
           </nuxt-link>
         </a-menu-item>
+        <a-menu-item v-if="studentId" @click="onClose">
+          <nuxt-link :to="`/analytics/attendance/` + studentId">
+            <a-icon type="file" />
+            <span>Список занятий</span>
+          </nuxt-link>
+        </a-menu-item>
 
         <a-menu-item v-if="isMonitor" @click="onClose">
           <nuxt-link to="/analytics/group">

@@ -126,6 +126,7 @@ export interface IAttendancesRepository {
   getList: (data: {
     classId?: string
     expiredAt?: Date
+    studentId?: string
   }) => Promise<IFuncResultModel<Attendance[]>>
   getByID: (id: string) => Promise<IFuncResultModel<Attendance>>
   create: (data: INewAttendanceDTM[]) => Promise<IFuncResultModel<Attendance[]>>

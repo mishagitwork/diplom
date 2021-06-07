@@ -89,9 +89,10 @@ export default {
 
   // PWA module configuration: https://go.nuxtjs.dev/pwa
   pwa: {
-    meta: { lang: 'ru' },
+    meta: { lang: 'ru', mobileAppIOS: true },
     manifest: {
       name: 'Контроль учета',
+      short_name: 'Контр. учета',
       lang: 'ru',
     },
   },

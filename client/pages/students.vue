@@ -35,6 +35,12 @@
         :style="`padding: 0.5rem ${isMobile ? '1rem' : '3rem'}`"
       >
         <a-list-item slot="renderItem" slot-scope="item">
+          <a
+            slot="actions"
+            @click="$router.push(`/analytics/attendance/${item.id}`)"
+          >
+            cписок
+          </a>
           <a slot="actions">редактировать </a>
           <a slot="actions" @click="deleteUser(item.user.id)"> удалить</a>
           <a-list-item-meta :description="item.user.fullName">
@@ -100,8 +106,8 @@
               {{ g.fullName }}
             </a-select-option>
           </a-select>
-          <a-checkbox :disabled="haveMonitor" v-model="form.isMonitor"
-            >Староста группы</a-checkbox
+          <a-checkbox :disabled="haveMonitor" v-model="form.isMonitor">
+            Староста группы</a-checkbox
           >
         </a-form-model-item>
         <a-form-model-item ref="birthday" label="День рождения" prop="birthday">
