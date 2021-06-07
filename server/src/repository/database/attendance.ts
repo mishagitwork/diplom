@@ -12,7 +12,10 @@ import { FindManyOptions, Raw } from 'typeorm'
 class AttendancesRepository implements IAttendancesRepository {
   getList = async (data: { classId?: string; expiredAt?: Date }) => {
     try {
-      let options: FindManyOptions = { where: { ...data } }
+      let options: FindManyOptions = {
+        where: { ...data },
+        order: { createdAt: 'DESC' },
+      }
       if (data.expiredAt) {
         options = { ...options, relations: ['student'] }
       }

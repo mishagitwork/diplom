@@ -10,7 +10,11 @@ import {
 import { INewAttendanceDTM } from '@src/models/dtm/AttendanceDTM'
 
 class AttendanceService implements IAttendanceService {
-  getList = async (data: { classId?: string; expiredAt?: Date }) => {
+  getList = async (data: {
+    classId?: string
+    expiredAt?: Date
+    studentId?: string
+  }) => {
     const res = await R.db.attendance.getList(data)
 
     if (res.error) return { error: res.error }
@@ -71,14 +75,14 @@ class AttendanceService implements IAttendanceService {
     return { value: res.value }
   }
   updateByStudent = async (data: IUpdateByStudentAttendance) => {
-    // const cUn = [
-    //   [52.093860337774906, 23.755108832181666],
-    //   [52.09884096626363, 23.762897967160907],
-    // ] БрГТУ
     const cUn = [
-      [52.07005469685884, 23.724151176135127],
-      [52.07150265382332, 23.726393502871534],
-    ] //Test
+      [52.093860337774906, 23.755108832181666],
+      [52.09884096626363, 23.762897967160907],
+    ] //БрГТУ
+    // const cUn = [
+    //   [52.07005469685884, 23.724151176135127],
+    //   [52.07150265382332, 23.726393502871534],
+    // ] //Test
     const isAttented =
       data.coords.latitude >= cUn[0][0] &&
       data.coords.latitude <= cUn[1][0] &&
