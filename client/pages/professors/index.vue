@@ -23,8 +23,8 @@
         :style="`padding: 0.5rem ${isMobile ? '1rem' : '3rem'}`"
       >
         <a-list-item slot="renderItem" slot-scope="item">
-          <a slot="actions">редактировать </a>
-          <a slot="actions"> удалить</a>
+          <a slot="actions" @click="updateDrawer(item)">редактировать </a>
+          <a slot="actions" @click="deleteUser(item.user.id)"> удалить</a>
           <a-list-item-meta :description="item.position">
             <span slot="title"> {{ item.user.fullName }}</span>
             <a-avatar slot="avatar" :src="item.user.avatar" />
@@ -33,7 +33,9 @@
       </a-list>
     </div>
     <a-drawer
-      title="Создать новую группу"
+      :title="
+        form.id ? 'Редактировать преподавателя' : 'Создать нового преподавателя'
+      "
       :width="isMobile ? '100%' : '40%'"
       :visible="isOpen"
       :body-style="{ paddingBottom: '80px' }"
@@ -115,7 +117,12 @@
         <a-button :style="{ marginRight: '8px' }" @click="resetForm">
           Отменить
         </a-button>
-        <a-button type="primary" @click="onSubmit"> Создать </a-button>
+        <a-button v-if="!this.form.id" type="primary" @click="onSubmit">
+          Создать
+        </a-button>
+        <a-button v-else type="primary" @click="updateStudent">
+          Редактировать
+        </a-button>
       </div>
     </a-drawer>
   </div>
@@ -205,11 +212,28 @@ export default {
       })
     },
     resetForm() {
-      this.$refs.ruleForm.resetFields()
+      this.form = { user: {} }
     },
     async getProfessors(value) {
       const res = await delivery.ProfessorAction.getList({ facultyId: value })
       this.professorsList = res.data
+    },
+    updateDrawer(item) {
+      delete item.user.password
+      this.form = { ...item }
+      this.isOpen = true
+    },
+    async updateStudent() {
+      const res = await delivery.ProfessorAction.update(this.form)
+      if (res.data) {
+        await this.getProfessors(this.selectFacultyId)
+        this.resetForm()
+        this.isOpen = false
+      }
+    },
+    async deleteUser(userId) {
+      await delivery.UserActions.delete({ userId })
+      await this.getProfessors(this.selectFacultyId)
     },
   },
 }

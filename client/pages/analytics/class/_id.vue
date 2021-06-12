@@ -1,9 +1,9 @@
 <template>
   <div :class="$style.container">
     <div :class="$style.mainInfo">
-      <div>Название предмета:{{ classInfo.subject.fullName }}</div>
-      <div>Название группы:{{ classInfo.group.fullName }}</div>
-      <div>Имя преподавателя:{{ classInfo.professor.user.fullName }}</div>
+      <div>Название предмета: {{ classInfo.subject.fullName }}</div>
+      <div>Название группы: {{ classInfo.group.fullName }}</div>
+      <div>Имя преподавателя: {{ classInfo.professor.user.fullName }}</div>
       <vue-qrcode :options="{ width: 250 }" :value="'1111-' + classInfo.id">
       </vue-qrcode>
     </div>
@@ -154,6 +154,10 @@ export default {
     flex-direction: column;
     justify-content: center;
     align-items: center;
+    text-align: center;
+    @include tablet {
+      padding: 0 1rem;
+    }
   }
   .header {
     display: flex;

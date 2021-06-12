@@ -3,6 +3,7 @@
     <a-modal
       v-model="isOpen"
       title="Предупреждение"
+      cancelText="Отмена"
       :ok-button-props="{ props: { disabled: !coords } }"
       @ok="agree"
     >
@@ -11,7 +12,7 @@
         и геолокации.
       </p>
 
-      <a-spin :spinning="spinning" :class="$style.spinning" tip="Loading...">
+      <a-spin :spinning="spinning" :class="$style.spinning" tip="Загрузка...">
         <p>
           Разрешить доступ к геолокации
           <a @click="getGeoLocation">Разрешить </a>

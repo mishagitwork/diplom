@@ -41,7 +41,7 @@
           >
             cписок
           </a>
-          <a slot="actions">редактировать </a>
+          <a slot="actions" @click="updateDrawer(item)">редактировать </a>
           <a slot="actions" @click="deleteUser(item.user.id)"> удалить</a>
           <a-list-item-meta :description="item.user.fullName">
             <span slot="title">
@@ -54,7 +54,7 @@
       </a-list>
     </div>
     <a-drawer
-      title="Создать нового студента"
+      :title="form.id ? 'Редактировать студента' : 'Создать нового студента'"
       :width="isMobile ? '100%' : '40%'"
       :visible="isOpen"
       :body-style="{ paddingBottom: '80px' }"
@@ -176,7 +176,12 @@
         <a-button :style="{ marginRight: '8px' }" @click="resetForm">
           Отменить
         </a-button>
-        <a-button type="primary" @click="onSubmit"> Создать </a-button>
+        <a-button v-if="!this.form.id" type="primary" @click="onSubmit">
+          Создать
+        </a-button>
+        <a-button v-else type="primary" @click="updateStudent">
+          Редактировать
+        </a-button>
       </div>
     </a-drawer>
   </div>
@@ -316,7 +321,7 @@ export default {
       })
     },
     resetForm() {
-      this.$refs.ruleForm.resetFields()
+      this.form = { user: {} }
     },
     async getGroups(value) {
       const res = await delivery.GroupAction.getList({ facultyId: value })
@@ -327,6 +332,19 @@ export default {
     async getStudents(value) {
       const res = await delivery.StudentAction.getList({ groupId: value })
       this.studentsList = res.data
+    },
+    updateDrawer(item) {
+      delete item.user.password
+      this.form = { ...item, facultyId: this.selectFacultyId }
+      this.isOpen = true
+    },
+    async updateStudent() {
+      const res = await delivery.StudentAction.update(this.form)
+      if (res.data) {
+        await this.getStudents(this.selectGroupId)
+        this.resetForm()
+        this.isOpen = false
+      }
     },
     async deleteUser(userId) {
       await delivery.UserActions.delete({ userId })

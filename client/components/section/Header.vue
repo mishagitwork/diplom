@@ -141,6 +141,8 @@ export default {
   top: 0;
   width: 100%;
   height: 5rem;
+  background: white;
+  z-index: 1000;
   .header {
     display: flex;
     justify-content: space-between;

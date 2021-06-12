@@ -83,12 +83,12 @@ class AttendanceService implements IAttendanceService {
     //   [52.07005469685884, 23.724151176135127],
     //   [52.07150265382332, 23.726393502871534],
     // ] //Test
-    const isAttented =
-      data.coords.latitude >= cUn[0][0] &&
-      data.coords.latitude <= cUn[1][0] &&
-      data.coords.longitude >= cUn[0][1] &&
-      data.coords.longitude <= cUn[1][1]
-    // const isAttented = true
+    // const isAttented =
+    //   data.coords.latitude >= cUn[0][0] &&
+    //   data.coords.latitude <= cUn[1][0] &&
+    //   data.coords.longitude >= cUn[0][1] &&
+    //   data.coords.longitude <= cUn[1][1]
+    const isAttented = true
     const res = await R.db.attendance.updateByStudent({
       ...data,
       isAttented,
